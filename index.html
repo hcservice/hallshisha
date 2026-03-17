@@ -18,7 +18,6 @@
       --shadow: 0 12px 40px rgba(0, 0, 0, 0.45);
       --radius: 20px;
     }
-
     * { box-sizing: border-box; }
     html, body {
       margin: 0;
@@ -29,29 +28,14 @@
       font-family: -apple-system, BlinkMacSystemFont, "Hiragino Sans", "Yu Gothic", sans-serif;
       min-height: 100%;
     }
-
     body { padding: 20px 16px 80px; }
-
-    .app {
-      max-width: 430px;
-      margin: 0 auto;
-    }
-
+    .app { max-width: 430px; margin: 0 auto; }
     .brand {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 20px;
+      display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;
     }
-
     .brand h1 {
-      margin: 0;
-      font-size: 18px;
-      letter-spacing: .08em;
-      color: var(--gold-2);
-      font-weight: 600;
+      margin: 0; font-size: 18px; letter-spacing: .08em; color: var(--gold-2); font-weight: 600;
     }
-
     .badge {
       border: 1px solid var(--line);
       color: var(--gold-2);
@@ -60,7 +44,6 @@
       font-size: 12px;
       background: rgba(212,175,55,.08);
     }
-
     .card {
       background:
         linear-gradient(180deg, rgba(212,175,55,.10), rgba(212,175,55,0) 26%),
@@ -73,7 +56,6 @@
       position: relative;
       overflow: hidden;
     }
-
     .card::after {
       content: "";
       position: absolute;
@@ -83,79 +65,35 @@
       background: radial-gradient(circle, rgba(212,175,55,.18), rgba(212,175,55,0) 68%);
       pointer-events: none;
     }
-
-    .member-card h2 {
-      margin: 0 0 6px;
-      font-size: 22px;
-      font-weight: 700;
-    }
-
+    .member-card h2 { margin: 0 0 6px; font-size: 22px; font-weight: 700; }
     .member-rank {
-      display: inline-flex;
-      gap: 8px;
-      align-items: center;
-      color: var(--gold-2);
-      font-size: 14px;
-      letter-spacing: .08em;
-      margin-bottom: 18px;
-      font-weight: 700;
+      display: inline-flex; gap: 8px; align-items: center; color: var(--gold-2);
+      font-size: 14px; letter-spacing: .08em; margin-bottom: 18px; font-weight: 700;
     }
-
     .hero-row {
-      display: grid;
-      grid-template-columns: 1fr auto;
-      gap: 12px;
-      align-items: center;
+      display: grid; grid-template-columns: 1fr auto; gap: 12px; align-items: center;
     }
-
     .points {
-      font-size: 42px;
-      font-weight: 800;
-      line-height: 1;
-      margin: 0;
+      font-size: 42px; font-weight: 800; line-height: 1; margin: 0;
     }
-
-    .points small {
-      font-size: 18px;
-      color: var(--gold-2);
-    }
-
-    .meta {
-      color: var(--muted);
-      font-size: 13px;
-    }
-
+    .points small { font-size: 18px; color: var(--gold-2); }
+    .meta { color: var(--muted); font-size: 13px; }
     .progress-shell {
-      margin-top: 16px;
-      background: rgba(255,255,255,.06);
-      border-radius: 999px;
-      overflow: hidden;
-      height: 12px;
-      border: 1px solid rgba(255,255,255,.04);
+      margin-top: 16px; background: rgba(255,255,255,.06); border-radius: 999px; overflow: hidden;
+      height: 12px; border: 1px solid rgba(255,255,255,.04);
     }
-
     .progress-bar {
-      height: 100%;
-      width: 0%;
-      border-radius: 999px;
+      height: 100%; width: 0%; border-radius: 999px;
       background: linear-gradient(90deg, var(--gold), var(--gold-2));
       transition: width .35s ease;
     }
-
     .section-title {
-      margin: 0 0 12px;
-      font-size: 15px;
-      color: var(--gold-2);
-      letter-spacing: .06em;
+      margin: 0 0 12px; font-size: 15px; color: var(--gold-2); letter-spacing: .06em;
     }
-
     .quick-grid {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 10px;
+      display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px;
     }
-
-    .quick-btn, .action-btn {
+    .quick-btn {
       border: 1px solid var(--line);
       background: rgba(212,175,55,.06);
       color: var(--text);
@@ -165,141 +103,64 @@
       font-weight: 700;
       cursor: pointer;
     }
-
-    .quick-btn small, .action-btn small { display:block; color: var(--muted); font-weight: 500; margin-top: 6px; }
-
+    .quick-btn small {
+      display:block; color: var(--muted); font-weight: 500; margin-top: 6px;
+    }
     .row {
-      display: flex;
-      justify-content: space-between;
-      gap: 10px;
-      padding: 12px 0;
-      border-bottom: 1px solid rgba(255,255,255,.06);
+      display: flex; justify-content: space-between; gap: 10px;
+      padding: 12px 0; border-bottom: 1px solid rgba(255,255,255,.06);
     }
-
     .row:last-child { border-bottom: 0; }
-
     .coupon {
-      padding: 14px;
-      border-radius: 16px;
-      border: 1px solid var(--line);
-      background: rgba(255,255,255,.02);
-      margin-bottom: 10px;
+      padding: 14px; border-radius: 16px; border: 1px solid var(--line);
+      background: rgba(255,255,255,.02); margin-bottom: 10px;
     }
-
-    .coupon h4 {
-      margin: 0 0 8px;
-      font-size: 18px;
-      color: var(--gold-2);
-    }
-
+    .coupon h4 { margin: 0 0 8px; font-size: 18px; color: var(--gold-2); }
     .coupon p { margin: 0 0 10px; color: var(--muted); font-size: 14px; }
-
     .coupon .footer {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 10px;
+      display: flex; justify-content: space-between; align-items: center; gap: 10px;
     }
-
     .pill {
-      display: inline-flex;
-      align-items: center;
-      padding: 6px 10px;
-      border-radius: 999px;
-      font-size: 12px;
-      font-weight: 700;
-      border: 1px solid var(--line);
-      color: var(--gold-2);
-      background: rgba(212,175,55,.06);
+      display: inline-flex; align-items: center; padding: 6px 10px; border-radius: 999px;
+      font-size: 12px; font-weight: 700; border: 1px solid var(--line);
+      color: var(--gold-2); background: rgba(212,175,55,.06);
     }
-
     .gold-btn {
-      border: 0;
-      background: linear-gradient(90deg, var(--gold), var(--gold-2));
-      color: #111;
-      border-radius: 999px;
-      padding: 10px 14px;
-      font-weight: 800;
-      cursor: pointer;
+      border: 0; background: linear-gradient(90deg, var(--gold), var(--gold-2));
+      color: #111; border-radius: 999px; padding: 10px 14px; font-weight: 800; cursor: pointer;
     }
-
-    .muted-btn {
-      border: 1px solid rgba(255,255,255,.08);
-      background: rgba(255,255,255,.04);
-      color: var(--muted);
-      border-radius: 999px;
-      padding: 10px 14px;
-      font-weight: 700;
-      cursor: not-allowed;
-    }
-
     .hidden { display: none !important; }
-
     .tabs {
-      position: sticky;
-      bottom: 0;
-      z-index: 20;
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 8px;
-      max-width: 430px;
-      margin: 18px auto 0;
-      padding: 12px;
-      backdrop-filter: blur(12px);
-      background: rgba(10,10,10,.72);
-      border: 1px solid rgba(255,255,255,.05);
-      border-radius: 18px;
+      position: sticky; bottom: 0; z-index: 20; display: grid; grid-template-columns: repeat(4, 1fr);
+      gap: 8px; max-width: 430px; margin: 18px auto 0; padding: 12px; backdrop-filter: blur(12px);
+      background: rgba(10,10,10,.72); border: 1px solid rgba(255,255,255,.05); border-radius: 18px;
     }
-
     .tab {
-      background: transparent;
-      border: 1px solid transparent;
-      color: var(--muted);
-      border-radius: 14px;
-      padding: 10px 8px;
-      font-size: 12px;
-      font-weight: 700;
-      cursor: pointer;
+      background: transparent; border: 1px solid transparent; color: var(--muted);
+      border-radius: 14px; padding: 10px 8px; font-size: 12px; font-weight: 700; cursor: pointer;
     }
-
     .tab.active {
-      color: var(--gold-2);
-      border-color: var(--line);
-      background: rgba(212,175,55,.08);
+      color: var(--gold-2); border-color: var(--line); background: rgba(212,175,55,.08);
     }
-
+    .tab.disabled {
+      opacity: .45;
+      pointer-events: none;
+    }
     .register input {
-      width: 100%;
-      background: #121212;
-      color: #fff;
-      border: 1px solid rgba(255,255,255,.08);
-      border-radius: 14px;
-      padding: 14px;
-      margin: 10px 0 14px;
-      font-size: 16px;
+      width: 100%; background: #121212; color: #fff; border: 1px solid rgba(255,255,255,.08);
+      border-radius: 14px; padding: 14px; margin: 10px 0 14px; font-size: 16px;
     }
-
     .status-box {
-      border: 1px solid var(--line);
-      border-radius: 16px;
-      padding: 14px;
-      background: rgba(212,175,55,.05);
-      margin-top: 12px;
+      border: 1px solid var(--line); border-radius: 16px; padding: 14px;
+      background: rgba(212,175,55,.05); margin-top: 12px;
     }
-
     .vip-state {
-      display: inline-flex;
-      padding: 6px 10px;
-      border-radius: 999px;
-      font-weight: 800;
-      font-size: 12px;
-      margin-bottom: 10px;
+      display: inline-flex; padding: 6px 10px; border-radius: 999px; font-weight: 800;
+      font-size: 12px; margin-bottom: 10px;
     }
-
     .vip-none { background: rgba(255,255,255,.08); color: var(--muted); }
     .vip-candidate { background: rgba(212,175,55,.14); color: var(--gold-2); }
     .vip-approved { background: rgba(103,194,119,.18); color: var(--success); }
-
     .error { color: #ff9c9c; font-size: 13px; }
     .success { color: #b6f1c0; font-size: 13px; }
   </style>
@@ -319,18 +180,18 @@
       <div id="register-msg" class="meta" style="margin-top:10px"></div>
     </section>
 
-    <section id="view-home">
+    <section id="view-home" class="hidden">
       <div class="card member-card">
         <div class="meta">会員証</div>
         <div class="hero-row">
           <div>
-            <h2 id="member-name">TARO YAMADA</h2>
-            <div class="member-rank"><span id="member-rank">GOLD</span><span id="vip-badge" class="pill hidden">VIP</span></div>
-            <p class="points"><span id="member-points">180</span><small>pt</small></p>
+            <h2 id="member-name">-</h2>
+            <div class="member-rank"><span id="member-rank">SMOKE</span><span id="vip-badge" class="pill hidden">VIP</span></div>
+            <p class="points"><span id="member-points">0</span><small>pt</small></p>
           </div>
-          <div class="pill" id="next-rank-pill">NEXT DIAMOND</div>
+          <div class="pill" id="next-rank-pill">NEXT BRONZE</div>
         </div>
-        <div class="meta" id="next-rank-text">次のランクまであと 7回</div>
+        <div class="meta" id="next-rank-text">次のランクまであと 3回</div>
         <div class="progress-shell"><div id="rank-progress" class="progress-bar"></div></div>
       </div>
 
@@ -423,7 +284,31 @@
       return map[rank] || map.SMOKE;
     }
 
+    function setTabsEnabled(enabled) {
+      document.querySelectorAll('.tab').forEach((btn) => {
+        const isHome = btn.dataset.tab === 'home';
+        btn.classList.toggle('disabled', !enabled && !isHome);
+      });
+    }
+
+    function showRegisterOnly() {
+      document.getElementById('view-register').classList.remove('hidden');
+      document.getElementById('view-home').classList.add('hidden');
+      document.getElementById('view-vip').classList.add('hidden');
+      document.getElementById('view-coupons').classList.add('hidden');
+      document.getElementById('view-history').classList.add('hidden');
+      document.getElementById('view-profile').classList.add('hidden');
+      setTabsEnabled(false);
+      document.querySelectorAll('.tab').forEach((btn) => btn.classList.toggle('active', btn.dataset.tab === 'home'));
+    }
+
     function switchTab(tab) {
+      if (!member && tab !== 'home') return;
+      if (!member) {
+        showRegisterOnly();
+        return;
+      }
+      document.getElementById('view-register').classList.add('hidden');
       Object.entries(views).forEach(([key, el]) => el.classList.toggle('hidden', key !== tab));
       document.querySelectorAll('.tab').forEach((btn) => btn.classList.toggle('active', btn.dataset.tab === tab));
     }
@@ -432,18 +317,16 @@
       const res = await fetch(`${API_BASE}/api/public/member?lineUserId=${encodeURIComponent(lineUserId)}`);
       const data = await res.json();
       if (!data.member) {
-        document.getElementById('view-register').classList.remove('hidden');
-        document.getElementById('view-home').classList.add('hidden');
-        document.getElementById('view-vip').classList.add('hidden');
-        document.getElementById('view-coupons').classList.add('hidden');
-        document.getElementById('view-history').classList.add('hidden');
-        document.getElementById('view-profile').classList.add('hidden');
+        member = null;
+        coupons = [];
+        visits = [];
+        showRegisterOnly();
         return;
       }
-      document.getElementById('view-register').classList.add('hidden');
       member = data.member;
       coupons = data.coupons || [];
       visits = data.visits || [];
+      setTabsEnabled(true);
       render();
       switchTab('home');
     }
@@ -452,13 +335,15 @@
       if (!member) return;
       const thresholds = rankThresholds(member.rank);
       const current = Number(member.total_visits || 0);
+      const points = Number(member.total_points || 0);
+      const totalSpent = Number(member.total_spent || 0);
       const progressRange = Math.max(1, thresholds.nextAt - thresholds.currentMin);
       const progressValue = Math.min(progressRange, Math.max(0, current - thresholds.currentMin));
       const progress = Math.min(100, Math.round(progressValue / progressRange * 100));
 
-      document.getElementById('member-name').textContent = member.name;
-      document.getElementById('member-rank').textContent = member.rank;
-      document.getElementById('member-points').textContent = member.total_points;
+      document.getElementById('member-name').textContent = member.name || '-';
+      document.getElementById('member-rank').textContent = member.rank || 'SMOKE';
+      document.getElementById('member-points').textContent = points;
       document.getElementById('rank-progress').style.width = `${progress}%`;
       document.getElementById('next-rank-pill').textContent = member.vip_status === 'approved' ? 'VIP MEMBER' : `NEXT ${thresholds.nextLabel}`;
       document.getElementById('next-rank-text').textContent = member.vip_status === 'approved'
@@ -479,13 +364,13 @@
       vipPill.className = `vip-state ${cls}`;
       vipPill.textContent = label;
       vipStateText.textContent = detail;
-      document.getElementById('vip-visits').textContent = `${member.total_visits} / 30回`;
-      document.getElementById('vip-total').textContent = `${numberYen(member.total_spent)} / ¥200,000`;
+      document.getElementById('vip-visits').textContent = `${current} / 30回`;
+      document.getElementById('vip-total').textContent = `${numberYen(totalSpent)} / ¥200,000`;
 
-      document.getElementById('profile-name').textContent = member.name;
-      document.getElementById('profile-line-id').textContent = member.line_user_id;
-      document.getElementById('profile-visits').textContent = `${member.total_visits}回`;
-      document.getElementById('profile-total').textContent = numberYen(member.total_spent);
+      document.getElementById('profile-name').textContent = member.name || '-';
+      document.getElementById('profile-line-id').textContent = member.line_user_id || '-';
+      document.getElementById('profile-visits').textContent = `${current}回`;
+      document.getElementById('profile-total').textContent = numberYen(totalSpent);
       document.getElementById('profile-date').textContent = safe(member.created_at);
 
       const couponList = document.getElementById('coupon-list');
@@ -498,9 +383,7 @@
           <p>${safe(coupon.description)}</p>
           <div class="footer">
             <span class="pill">期限 ${safe(coupon.expires_at)}</span>
-            <button class="${coupon.is_active ? 'gold-btn' : 'muted-btn'}" ${coupon.is_active ? '' : 'disabled'}>
-              ${coupon.is_active ? '店舗で使用' : '使用済み'}
-            </button>
+            <span class="pill">${coupon.target_rank || 'ALL'}</span>
           </div>
         `;
         couponList.appendChild(card);
@@ -511,7 +394,7 @@
       visits.forEach((visit) => {
         const row = document.createElement('div');
         row.className = 'row';
-        row.innerHTML = `<div><strong>${visit.visit_date}</strong><div class="meta">${safe(visit.note)}</div></div><div>${visit.points_added}pt</div>`;
+        row.innerHTML = `<div><strong>${visit.visit_date || visit.created_at || '-'}</strong><div class="meta">${safe(visit.note || visit.memo)}</div></div><div>${Number(visit.points_added || 0)}pt</div>`;
         visitList.appendChild(row);
       });
     }
@@ -533,24 +416,34 @@
         msg.className = 'error';
         return;
       }
-      const res = await fetch(`${API_BASE}/api/public/register`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ lineUserId, name }),
-      });
-      const data = await res.json();
-      if (!data.ok) {
-        msg.textContent = data.error || '登録に失敗しました';
+      try {
+        const res = await fetch(`${API_BASE}/api/public/register`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ lineUserId, name }),
+        });
+        const data = await res.json();
+        if (!data.ok) {
+          msg.textContent = data.error || '登録に失敗しました';
+          msg.className = 'error';
+          return;
+        }
+        msg.textContent = '登録できました';
+        msg.className = 'success';
+        document.getElementById('register-name').value = '';
+        await fetchPublicMember();
+      } catch (err) {
+        msg.textContent = `登録エラー: ${err.message}`;
         msg.className = 'error';
-        return;
       }
-      msg.textContent = '登録できました';
-      msg.className = 'success';
-      fetchPublicMember();
     });
 
+    setTabsEnabled(false);
     fetchPublicMember().catch((err) => {
-      alert(`APIに接続できません: ${err.message}\nAPI_BASE=${API_BASE}`);
+      const msg = document.getElementById('register-msg');
+      document.getElementById('view-register').classList.remove('hidden');
+      msg.textContent = `API接続エラー: ${err.message}`;
+      msg.className = 'error';
     });
   </script>
 </body>
