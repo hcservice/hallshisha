@@ -49,6 +49,7 @@
     .stats { display:grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; }
     .stat { background: var(--panel-2); border:1px solid rgba(255,255,255,.05); border-radius: 16px; padding: 14px; }
     .stat strong { display:block; font-size: 24px; margin-top: 8px; }
+    .hidden { display:none !important; }
     @media (max-width: 900px) {
       .grid { grid-template-columns: 1fr; }
       .filters, .form-grid, .form-grid.two, .stats { grid-template-columns: 1fr; }
@@ -108,6 +109,28 @@
               <tbody id="members-body"></tbody>
             </table>
           </div>
+        </section>
+
+        <section class="panel">
+          <h3 class="section-title">クーポン一覧</h3>
+          <div class="actions" style="margin-bottom:12px;">
+            <button class="ghost" id="load-coupons-btn">クーポン更新</button>
+          </div>
+          <div style="overflow:auto">
+            <table>
+              <thead>
+                <tr>
+                  <th>タイトル</th>
+                  <th>対象</th>
+                  <th>期限</th>
+                  <th>状態</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody id="coupon-list-body"></tbody>
+            </table>
+          </div>
+          <div id="coupon-list-message" class="message"></div>
         </section>
 
         <section class="panel">
@@ -204,6 +227,20 @@
       return `¥${Number(n || 0).toLocaleString('ja-JP')}`;
     }
 
+    function couponTargetText(coupon) {
+      const target = coupon.target_rank || coupon.rank_target || '';
+      if (coupon.member_id) return `個別(${coupon.member_id})`;
+      return target || '全ランク';
+    }
+
+    function couponExpiryText(coupon) {
+      return coupon.expires_at || '-';
+    }
+
+    function couponStatusText(coupon) {
+      return Number(coupon.is_active || 0) === 1 ? '有効' : '無効';
+    }
+
     function renderStats() {
       const members = state.members;
       document.getElementById('stat-members').textContent = members.length;
@@ -238,6 +275,35 @@
       renderStats();
     }
 
+    function renderCoupons(coupons) {
+      const tbody = document.getElementById('coupon-list-body');
+      tbody.innerHTML = '';
+      if (!coupons.length) {
+        tbody.innerHTML = '<tr><td colspan="5" class="muted">クーポンがありません</td></tr>';
+        return;
+      }
+
+      coupons.forEach((coupon) => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td><strong>${coupon.title}</strong><div class="muted">${coupon.description || ''}</div></td>
+          <td>${couponTargetText(coupon)}</td>
+          <td>${couponExpiryText(coupon)}</td>
+          <td><span class="pill">${couponStatusText(coupon)}</span></td>
+          <td>
+            ${Number(coupon.is_active || 0) === 1
+              ? `<button class="danger" data-coupon-disable="${coupon.id}">無効化</button>`
+              : `<span class="muted">-</span>`}
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+
+      tbody.querySelectorAll('button[data-coupon-disable]').forEach((btn) => {
+        btn.addEventListener('click', () => deactivateCoupon(btn.dataset.couponDisable));
+      });
+    }
+
     async function loadMembers() {
       const q = document.getElementById('search-q').value.trim();
       const vipOnly = document.getElementById('filter-vip').value;
@@ -253,6 +319,35 @@
       if (!data.ok) return alert(data.error || 'VIP候補取得失敗');
       state.members = data.members || [];
       renderMembers();
+    }
+
+    async function loadCoupons() {
+      const data = await api('/api/admin/coupons');
+      const msg = document.getElementById('coupon-list-message');
+      if (!data.ok) {
+        msg.textContent = data.error || 'クーポン取得失敗';
+        msg.className = 'message ng';
+        return;
+      }
+      renderCoupons(data.coupons || []);
+      msg.textContent = '';
+      msg.className = 'message';
+    }
+
+    async function deactivateCoupon(couponId) {
+      const data = await api('/api/admin/coupon/deactivate', {
+        method: 'POST',
+        body: JSON.stringify({ couponId: Number(couponId) })
+      });
+      const msg = document.getElementById('coupon-list-message');
+      if (!data.ok) {
+        msg.textContent = data.error || '無効化失敗';
+        msg.className = 'message ng';
+        return;
+      }
+      msg.textContent = 'クーポンを無効化しました';
+      msg.className = 'message ok';
+      await loadCoupons();
     }
 
     async function selectMember(memberId) {
@@ -309,6 +404,7 @@
       }
       msg.textContent = 'クーポンを作成しました';
       msg.className = 'message ok';
+      await loadCoupons();
     }
 
     async function approveVip() {
@@ -347,12 +443,14 @@
     document.getElementById('refresh-members').addEventListener('click', loadMembers);
     document.getElementById('search-btn').addEventListener('click', loadMembers);
     document.getElementById('load-candidates').addEventListener('click', loadVipCandidates);
+    document.getElementById('load-coupons-btn').addEventListener('click', loadCoupons);
     document.getElementById('add-visit-btn').addEventListener('click', addVisit);
     document.getElementById('create-coupon').addEventListener('click', createCoupon);
     document.getElementById('approve-vip-btn').addEventListener('click', approveVip);
     document.getElementById('reject-vip-btn').addEventListener('click', rejectVip);
 
     loadMembers();
+    loadCoupons();
   </script>
 </body>
 </html>
