@@ -1,0 +1,358 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SHISHA CAFE HALL | 管理画面</title>
+  <style>
+    :root {
+      --bg: #0b0b0b;
+      --panel: #151515;
+      --panel-2: #101010;
+      --line: rgba(212,175,55,.22);
+      --gold: #d4af37;
+      --gold-2: #f4dc8a;
+      --text: #fff;
+      --muted: #a8a8a8;
+      --success: #5dc07b;
+      --danger: #f06b6b;
+    }
+    * { box-sizing: border-box; }
+    html, body { margin: 0; background: linear-gradient(180deg, #111 0%, #080808 100%); color: var(--text); font-family: -apple-system, BlinkMacSystemFont, "Hiragino Sans", "Yu Gothic", sans-serif; }
+    body { padding: 24px; }
+    .wrap { max-width: 1200px; margin: 0 auto; }
+    .topbar { display:flex; justify-content:space-between; align-items:center; gap:16px; margin-bottom:24px; }
+    .topbar h1 { margin:0; font-size: 24px; color: var(--gold-2); letter-spacing:.08em; }
+    .panel { background: linear-gradient(180deg, rgba(212,175,55,.08), rgba(212,175,55,0) 20%), var(--panel); border: 1px solid var(--line); border-radius: 22px; padding: 18px; margin-bottom: 18px; }
+    .grid { display:grid; grid-template-columns: 1.3fr .9fr; gap: 18px; }
+    .section-title { margin: 0 0 14px; color: var(--gold-2); font-size: 16px; }
+    .filters, .form-grid { display:grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; }
+    .form-grid.two { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    input, select, textarea { width:100%; background:#0f0f0f; border:1px solid rgba(255,255,255,.08); color:#fff; border-radius:14px; padding:12px 14px; font-size:14px; }
+    textarea { min-height:100px; resize:vertical; }
+    button { border:0; border-radius:14px; padding:12px 14px; font-weight:800; cursor:pointer; }
+    .gold { background: linear-gradient(90deg, var(--gold), var(--gold-2)); color:#111; }
+    .ghost { background: rgba(212,175,55,.08); color:#fff; border:1px solid var(--line); }
+    .danger { background: rgba(240,107,107,.12); color:#ffd7d7; border:1px solid rgba(240,107,107,.3); }
+    table { width:100%; border-collapse: collapse; }
+    th, td { padding: 12px 10px; border-bottom: 1px solid rgba(255,255,255,.06); text-align:left; font-size:14px; vertical-align:top; }
+    th { color: var(--gold-2); font-size:13px; }
+    tr:hover td { background: rgba(255,255,255,.02); }
+    .pill { display:inline-flex; padding: 6px 10px; border-radius:999px; font-size:12px; font-weight:800; border:1px solid var(--line); color:var(--gold-2); }
+    .muted { color: var(--muted); }
+    .stack { display:flex; flex-direction:column; gap:10px; }
+    .split { display:flex; justify-content:space-between; gap:10px; align-items:center; }
+    .actions { display:flex; gap:8px; flex-wrap:wrap; }
+    .message { font-size:13px; margin-top:8px; color: var(--muted); }
+    .ok { color: #b5efc3; }
+    .ng { color: #ffc0c0; }
+    .stats { display:grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; }
+    .stat { background: var(--panel-2); border:1px solid rgba(255,255,255,.05); border-radius: 16px; padding: 14px; }
+    .stat strong { display:block; font-size: 24px; margin-top: 8px; }
+    @media (max-width: 900px) {
+      .grid { grid-template-columns: 1fr; }
+      .filters, .form-grid, .form-grid.two, .stats { grid-template-columns: 1fr; }
+      body { padding: 16px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="topbar">
+      <h1>SHISHA CAFE HALL 管理画面</h1>
+      <div class="actions">
+        <input id="api-base" placeholder="API Base" style="max-width:240px" />
+        <input id="admin-token" placeholder="Admin Token" style="max-width:220px" />
+        <button class="gold" id="save-config">接続保存</button>
+      </div>
+    </div>
+
+    <section class="panel">
+      <h3 class="section-title">概要</h3>
+      <div class="stats">
+        <div class="stat"><div class="muted">会員数</div><strong id="stat-members">0</strong></div>
+        <div class="stat"><div class="muted">VIP候補</div><strong id="stat-candidates">0</strong></div>
+        <div class="stat"><div class="muted">VIP承認済み</div><strong id="stat-approved">0</strong></div>
+        <div class="stat"><div class="muted">GOLD以上</div><strong id="stat-gold-up">0</strong></div>
+      </div>
+    </section>
+
+    <div class="grid">
+      <div>
+        <section class="panel">
+          <div class="split">
+            <h3 class="section-title">顧客一覧</h3>
+            <button class="ghost" id="refresh-members">更新</button>
+          </div>
+          <div class="filters" style="margin-bottom:12px;">
+            <input id="search-q" placeholder="名前 or LINE IDで検索" />
+            <select id="filter-vip">
+              <option value="0">全員</option>
+              <option value="1">VIP関連のみ</option>
+            </select>
+            <button class="ghost" id="search-btn">検索</button>
+            <button class="gold" id="load-candidates">VIP候補表示</button>
+          </div>
+          <div style="overflow:auto">
+            <table>
+              <thead>
+                <tr>
+                  <th>名前</th>
+                  <th>ランク</th>
+                  <th>来店</th>
+                  <th>累計</th>
+                  <th>VIP</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody id="members-body"></tbody>
+            </table>
+          </div>
+        </section>
+
+        <section class="panel">
+          <h3 class="section-title">クーポン作成</h3>
+          <div class="form-grid two">
+            <input id="coupon-title" placeholder="タイトル" />
+            <input id="coupon-expires" placeholder="有効期限 2026-04-30" />
+            <select id="coupon-rank">
+              <option value="">全ランク</option>
+              <option>SMOKE</option>
+              <option>BRONZE</option>
+              <option>SILVER</option>
+              <option>GOLD</option>
+              <option>DIAMOND</option>
+              <option>VIP</option>
+            </select>
+            <input id="coupon-member-id" placeholder="個別配布する memberId（任意）" />
+          </div>
+          <textarea id="coupon-description" placeholder="説明"></textarea>
+          <div class="actions">
+            <button class="gold" id="create-coupon">クーポン作成</button>
+          </div>
+          <div id="coupon-message" class="message"></div>
+        </section>
+      </div>
+
+      <div>
+        <section class="panel">
+          <h3 class="section-title">顧客詳細</h3>
+          <div id="detail-empty" class="muted">左の一覧から顧客を選択してください。</div>
+          <div id="detail-box" class="hidden">
+            <div class="stack">
+              <div class="split"><strong id="detail-name">-</strong><span id="detail-rank" class="pill">-</span></div>
+              <div class="muted" id="detail-line">-</div>
+              <div class="split"><span>総来店数</span><strong id="detail-visits">0</strong></div>
+              <div class="split"><span>累計利用額</span><strong id="detail-total">¥0</strong></div>
+              <div class="split"><span>VIP状態</span><strong id="detail-vip">none</strong></div>
+            </div>
+            <hr style="border-color:rgba(255,255,255,.06); margin:16px 0;">
+            <h4 style="margin:0 0 10px; color:var(--gold-2);">来店追加</h4>
+            <div class="form-grid two">
+              <input id="visit-date" placeholder="2026-03-17" />
+              <input id="visit-spent" type="number" placeholder="利用金額" />
+              <input id="visit-points" type="number" placeholder="付与ポイント 例:10" value="10" />
+              <input id="visit-note" placeholder="メモ" />
+            </div>
+            <div class="actions" style="margin-top:10px;">
+              <button class="gold" id="add-visit-btn">来店を追加</button>
+            </div>
+            <div id="visit-message" class="message"></div>
+            <hr style="border-color:rgba(255,255,255,.06); margin:16px 0;">
+            <h4 style="margin:0 0 10px; color:var(--gold-2);">VIP操作</h4>
+            <textarea id="vip-note" placeholder="承認/却下メモ"></textarea>
+            <div class="actions">
+              <button class="gold" id="approve-vip-btn">VIP承認</button>
+              <button class="danger" id="reject-vip-btn">VIP却下</button>
+            </div>
+            <div id="vip-message" class="message"></div>
+          </div>
+        </section>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const state = { members: [], selected: null };
+    const apiBaseInput = document.getElementById('api-base');
+    const adminTokenInput = document.getElementById('admin-token');
+    apiBaseInput.value = localStorage.getItem('hall_api_base') || 'https://hall-loyalty-api.hallshisha.workers.dev';
+    adminTokenInput.value = localStorage.getItem('hall_admin_token') || 'hall-admin-demo';
+
+    function saveConfig() {
+      localStorage.setItem('hall_api_base', apiBaseInput.value.trim());
+      localStorage.setItem('hall_admin_token', adminTokenInput.value.trim());
+      alert('保存しました');
+    }
+
+    function api(path, options = {}) {
+      return fetch(`${apiBaseInput.value.trim()}${path}`, {
+        ...options,
+        headers: {
+          'Content-Type': 'application/json',
+          'X-Admin-Token': adminTokenInput.value.trim(),
+          ...(options.headers || {}),
+        },
+      }).then((r) => r.json());
+    }
+
+    function vipText(status) {
+      return status === 'approved' ? '承認済み' : status === 'candidate' ? '候補' : 'なし';
+    }
+
+    function yen(n) {
+      return `¥${Number(n || 0).toLocaleString('ja-JP')}`;
+    }
+
+    function renderStats() {
+      const members = state.members;
+      document.getElementById('stat-members').textContent = members.length;
+      document.getElementById('stat-candidates').textContent = members.filter(m => m.vip_status === 'candidate').length;
+      document.getElementById('stat-approved').textContent = members.filter(m => m.vip_status === 'approved').length;
+      document.getElementById('stat-gold-up').textContent = members.filter(m => ['GOLD', 'DIAMOND'].includes(m.rank) || m.vip_status === 'approved').length;
+    }
+
+    function renderMembers() {
+      const tbody = document.getElementById('members-body');
+      tbody.innerHTML = '';
+      if (!state.members.length) {
+        tbody.innerHTML = '<tr><td colspan="6" class="muted">データがありません</td></tr>';
+        renderStats();
+        return;
+      }
+      state.members.forEach((m) => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td><strong>${m.name}</strong><div class="muted">${m.line_user_id}</div></td>
+          <td>${m.rank}</td>
+          <td>${m.total_visits}回</td>
+          <td>${yen(m.total_spent)}</td>
+          <td><span class="pill">${vipText(m.vip_status)}</span></td>
+          <td><button class="ghost" data-id="${m.id}">詳細</button></td>
+        `;
+        tbody.appendChild(tr);
+      });
+      tbody.querySelectorAll('button[data-id]').forEach((btn) => {
+        btn.addEventListener('click', () => selectMember(btn.dataset.id));
+      });
+      renderStats();
+    }
+
+    async function loadMembers() {
+      const q = document.getElementById('search-q').value.trim();
+      const vipOnly = document.getElementById('filter-vip').value;
+      const query = new URLSearchParams({ q, vipOnly }).toString();
+      const data = await api(`/api/admin/members?${query}`);
+      if (!data.ok) return alert(data.error || '会員取得失敗');
+      state.members = data.members || [];
+      renderMembers();
+    }
+
+    async function loadVipCandidates() {
+      const data = await api('/api/admin/vip-candidates');
+      if (!data.ok) return alert(data.error || 'VIP候補取得失敗');
+      state.members = data.members || [];
+      renderMembers();
+    }
+
+    async function selectMember(memberId) {
+      const data = await api(`/api/admin/member/detail?memberId=${encodeURIComponent(memberId)}`);
+      if (!data.ok) return alert(data.error || '詳細取得失敗');
+      state.selected = data.member;
+      document.getElementById('detail-empty').classList.add('hidden');
+      document.getElementById('detail-box').classList.remove('hidden');
+      document.getElementById('detail-name').textContent = data.member.name;
+      document.getElementById('detail-rank').textContent = data.member.rank;
+      document.getElementById('detail-line').textContent = data.member.line_user_id;
+      document.getElementById('detail-visits').textContent = `${data.member.total_visits}回`;
+      document.getElementById('detail-total').textContent = yen(data.member.total_spent);
+      document.getElementById('detail-vip').textContent = vipText(data.member.vip_status);
+      document.getElementById('coupon-member-id').value = data.member.id;
+    }
+
+    async function addVisit() {
+      if (!state.selected) return alert('顧客を選択してください');
+      const payload = {
+        memberId: state.selected.id,
+        visitDate: document.getElementById('visit-date').value.trim() || new Date().toISOString().slice(0, 10),
+        spentAmount: Number(document.getElementById('visit-spent').value || 0),
+        pointsAdded: Number(document.getElementById('visit-points').value || 10),
+        note: document.getElementById('visit-note').value.trim(),
+      };
+      const data = await api('/api/admin/member/add-visit', { method: 'POST', body: JSON.stringify(payload) });
+      const msg = document.getElementById('visit-message');
+      if (!data.ok) {
+        msg.textContent = data.error || '追加失敗';
+        msg.className = 'message ng';
+        return;
+      }
+      msg.textContent = '来店を追加しました';
+      msg.className = 'message ok';
+      await loadMembers();
+      await selectMember(state.selected.id);
+    }
+
+    async function createCoupon() {
+      const payload = {
+        title: document.getElementById('coupon-title').value.trim(),
+        description: document.getElementById('coupon-description').value.trim(),
+        expiresAt: document.getElementById('coupon-expires').value.trim(),
+        targetRank: document.getElementById('coupon-rank').value.trim(),
+        memberId: document.getElementById('coupon-member-id').value.trim(),
+      };
+      const data = await api('/api/admin/coupon/create', { method: 'POST', body: JSON.stringify(payload) });
+      const msg = document.getElementById('coupon-message');
+      if (!data.ok) {
+        msg.textContent = data.error || '作成失敗';
+        msg.className = 'message ng';
+        return;
+      }
+      msg.textContent = 'クーポンを作成しました';
+      msg.className = 'message ok';
+    }
+
+    async function approveVip() {
+      if (!state.selected) return alert('顧客を選択してください');
+      const payload = { memberId: state.selected.id, adminNote: document.getElementById('vip-note').value.trim() };
+      const data = await api('/api/admin/vip/approve', { method: 'POST', body: JSON.stringify(payload) });
+      const msg = document.getElementById('vip-message');
+      if (!data.ok) {
+        msg.textContent = data.error || '承認失敗';
+        msg.className = 'message ng';
+        return;
+      }
+      msg.textContent = 'VIP承認しました';
+      msg.className = 'message ok';
+      await loadMembers();
+      await selectMember(state.selected.id);
+    }
+
+    async function rejectVip() {
+      if (!state.selected) return alert('顧客を選択してください');
+      const payload = { memberId: state.selected.id, adminNote: document.getElementById('vip-note').value.trim() };
+      const data = await api('/api/admin/vip/reject', { method: 'POST', body: JSON.stringify(payload) });
+      const msg = document.getElementById('vip-message');
+      if (!data.ok) {
+        msg.textContent = data.error || '却下失敗';
+        msg.className = 'message ng';
+        return;
+      }
+      msg.textContent = 'VIP却下しました';
+      msg.className = 'message ok';
+      await loadMembers();
+      await selectMember(state.selected.id);
+    }
+
+    document.getElementById('save-config').addEventListener('click', saveConfig);
+    document.getElementById('refresh-members').addEventListener('click', loadMembers);
+    document.getElementById('search-btn').addEventListener('click', loadMembers);
+    document.getElementById('load-candidates').addEventListener('click', loadVipCandidates);
+    document.getElementById('add-visit-btn').addEventListener('click', addVisit);
+    document.getElementById('create-coupon').addEventListener('click', createCoupon);
+    document.getElementById('approve-vip-btn').addEventListener('click', approveVip);
+    document.getElementById('reject-vip-btn').addEventListener('click', rejectVip);
+
+    loadMembers();
+  </script>
+</body>
+</html>
