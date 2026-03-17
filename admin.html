@@ -16,54 +16,219 @@
       --muted: #a8a8a8;
       --success: #5dc07b;
       --danger: #f06b6b;
+      --radius: 22px;
     }
     * { box-sizing: border-box; }
-    html, body { margin: 0; background: linear-gradient(180deg, #111 0%, #080808 100%); color: var(--text); font-family: -apple-system, BlinkMacSystemFont, "Hiragino Sans", "Yu Gothic", sans-serif; }
-    body { padding: 24px; }
-    .wrap { max-width: 1200px; margin: 0 auto; }
-    .topbar { display:flex; justify-content:space-between; align-items:center; gap:16px; margin-bottom:24px; }
-    .topbar h1 { margin:0; font-size: 24px; color: var(--gold-2); letter-spacing:.08em; }
-    .panel { background: linear-gradient(180deg, rgba(212,175,55,.08), rgba(212,175,55,0) 20%), var(--panel); border: 1px solid var(--line); border-radius: 22px; padding: 18px; margin-bottom: 18px; }
-    .grid { display:grid; grid-template-columns: 1.3fr .9fr; gap: 18px; }
-    .section-title { margin: 0 0 14px; color: var(--gold-2); font-size: 16px; }
-    .filters, .form-grid { display:grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; }
-    .form-grid.two { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-    input, select, textarea { width:100%; background:#0f0f0f; border:1px solid rgba(255,255,255,.08); color:#fff; border-radius:14px; padding:12px 14px; font-size:14px; }
+    html, body {
+      margin: 0;
+      background: linear-gradient(180deg, #111 0%, #080808 100%);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, "Hiragino Sans", "Yu Gothic", sans-serif;
+    }
+    body { padding: 16px; }
+    .wrap { max-width: 1180px; margin: 0 auto; }
+    .topbar {
+      display:flex;
+      justify-content:space-between;
+      align-items:flex-start;
+      gap:14px;
+      margin-bottom:18px;
+      flex-wrap:wrap;
+    }
+    .topbar h1 {
+      margin:0;
+      font-size: 24px;
+      color: var(--gold-2);
+      letter-spacing:.06em;
+      line-height:1.2;
+    }
+    .sub {
+      color: var(--muted);
+      font-size: 13px;
+      margin-top: 6px;
+    }
+    .config-row {
+      display:grid;
+      grid-template-columns: 1fr 180px auto;
+      gap:10px;
+      width:100%;
+      max-width: 760px;
+    }
+    .panel {
+      background:
+        linear-gradient(180deg, rgba(212,175,55,.08), rgba(212,175,55,0) 20%),
+        var(--panel);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 18px;
+      margin-bottom: 16px;
+    }
+    .section-title {
+      margin: 0 0 14px;
+      color: var(--gold-2);
+      font-size: 16px;
+      line-height: 1.2;
+    }
+    .grid {
+      display:grid;
+      grid-template-columns: 1.08fr .92fr;
+      gap: 16px;
+      align-items:start;
+    }
+    .stats {
+      display:grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 10px;
+    }
+    .stat {
+      background: var(--panel-2);
+      border:1px solid rgba(255,255,255,.05);
+      border-radius: 18px;
+      padding: 14px;
+      min-height: 96px;
+    }
+    .stat .label { color: var(--muted); font-size: 13px; }
+    .stat strong { display:block; font-size: 30px; margin-top: 8px; }
+    input, select, textarea {
+      width:100%;
+      background:#0f0f0f;
+      border:1px solid rgba(255,255,255,.08);
+      color:#fff;
+      border-radius:16px;
+      padding:14px;
+      font-size:15px;
+      outline: none;
+    }
     textarea { min-height:100px; resize:vertical; }
-    button { border:0; border-radius:14px; padding:12px 14px; font-weight:800; cursor:pointer; }
+    button {
+      border:0;
+      border-radius:16px;
+      padding:13px 16px;
+      font-weight:800;
+      cursor:pointer;
+      font-size:15px;
+    }
     .gold { background: linear-gradient(90deg, var(--gold), var(--gold-2)); color:#111; }
     .ghost { background: rgba(212,175,55,.08); color:#fff; border:1px solid var(--line); }
     .danger { background: rgba(240,107,107,.12); color:#ffd7d7; border:1px solid rgba(240,107,107,.3); }
-    table { width:100%; border-collapse: collapse; }
-    th, td { padding: 12px 10px; border-bottom: 1px solid rgba(255,255,255,.06); text-align:left; font-size:14px; vertical-align:top; }
-    th { color: var(--gold-2); font-size:13px; }
-    tr:hover td { background: rgba(255,255,255,.02); }
-    .pill { display:inline-flex; padding: 6px 10px; border-radius:999px; font-size:12px; font-weight:800; border:1px solid var(--line); color:var(--gold-2); }
-    .muted { color: var(--muted); }
-    .stack { display:flex; flex-direction:column; gap:10px; }
-    .split { display:flex; justify-content:space-between; gap:10px; align-items:center; }
+    .filters, .form-grid { display:grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; }
+    .form-grid.two { grid-template-columns: repeat(2, minmax(0, 1fr)); }
     .actions { display:flex; gap:8px; flex-wrap:wrap; }
     .message { font-size:13px; margin-top:8px; color: var(--muted); }
     .ok { color: #b5efc3; }
     .ng { color: #ffc0c0; }
-    .stats { display:grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; }
-    .stat { background: var(--panel-2); border:1px solid rgba(255,255,255,.05); border-radius: 16px; padding: 14px; }
-    .stat strong { display:block; font-size: 24px; margin-top: 8px; }
+    .pill {
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      padding: 6px 10px;
+      border-radius:999px;
+      font-size:12px;
+      font-weight:800;
+      border:1px solid var(--line);
+      color:var(--gold-2);
+      min-width: 56px;
+      white-space: nowrap;
+    }
+    .split { display:flex; justify-content:space-between; gap:10px; align-items:center; }
+    .muted { color: var(--muted); }
     .hidden { display:none !important; }
+    .member-cards, .coupon-cards {
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+    }
+    .member-card, .coupon-card {
+      background: #101010;
+      border: 1px solid rgba(255,255,255,.05);
+      border-radius: 18px;
+      padding: 14px;
+    }
+    .member-card-top, .coupon-card-top {
+      display:flex;
+      justify-content:space-between;
+      gap:10px;
+      align-items:flex-start;
+      margin-bottom: 8px;
+    }
+    .member-name, .coupon-title { font-size: 18px; font-weight: 800; }
+    .line-id, .coupon-desc {
+      color: var(--muted);
+      font-size: 13px;
+      margin-top: 4px;
+      word-break: break-all;
+    }
+    .member-meta {
+      display:grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap:8px;
+      margin: 12px 0;
+    }
+    .meta-box {
+      background: rgba(255,255,255,.025);
+      border: 1px solid rgba(255,255,255,.05);
+      border-radius: 14px;
+      padding: 10px;
+    }
+    .meta-box .label { color: var(--muted); font-size: 12px; }
+    .meta-box strong { display:block; margin-top: 6px; font-size: 18px; }
+    .detail-grid {
+      display:grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap:10px;
+    }
+    .detail-stat {
+      background: #101010;
+      border:1px solid rgba(255,255,255,.05);
+      border-radius:16px;
+      padding:12px;
+    }
+    .detail-stat .label { color: var(--muted); font-size: 12px; }
+    .detail-stat strong { display:block; margin-top: 8px; font-size: 24px; }
+    .hr {
+      height:1px;
+      background: rgba(255,255,255,.06);
+      margin:16px 0;
+    }
+    .coupon-badges {
+      display:flex;
+      gap:8px;
+      flex-wrap:wrap;
+      margin-top: 10px;
+    }
+    .desktop-table { display:none; }
+
+    @media (min-width: 901px) {
+      body { padding: 24px; }
+      .desktop-table { display:block; }
+      .mobile-cards { display:none; }
+    }
+
     @media (max-width: 900px) {
       .grid { grid-template-columns: 1fr; }
-      .filters, .form-grid, .form-grid.two, .stats { grid-template-columns: 1fr; }
-      body { padding: 16px; }
+      .config-row { grid-template-columns: 1fr; max-width: none; }
+      .stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .filters, .form-grid, .form-grid.two, .detail-grid { grid-template-columns: 1fr; }
+      .member-meta { grid-template-columns: 1fr 1fr 1fr; }
+      .topbar h1 { font-size: 20px; }
+      .panel { padding: 16px; }
+      .member-card-top, .coupon-card-top { flex-direction: column; align-items:flex-start; }
+      .actions button { flex: 1 1 auto; }
+      .member-meta strong { font-size: 16px; }
+      .detail-stat strong { font-size: 20px; }
     }
   </style>
 </head>
 <body>
   <div class="wrap">
     <div class="topbar">
-      <h1>SHISHA CAFE HALL 管理画面</h1>
-      <div class="actions">
-        <input id="api-base" placeholder="API Base" style="max-width:240px" />
-        <input id="admin-token" placeholder="Admin Token" style="max-width:220px" />
+      <div>
+        <h1>SHISHA CAFE HALL 管理画面</h1>
+        <div class="sub">会員・来店・クーポン・VIP管理</div>
+      </div>
+      <div class="config-row">
+        <input id="api-base" placeholder="API Base" />
+        <input id="admin-token" placeholder="Admin Token" />
         <button class="gold" id="save-config">接続保存</button>
       </div>
     </div>
@@ -71,10 +236,10 @@
     <section class="panel">
       <h3 class="section-title">概要</h3>
       <div class="stats">
-        <div class="stat"><div class="muted">会員数</div><strong id="stat-members">0</strong></div>
-        <div class="stat"><div class="muted">VIP候補</div><strong id="stat-candidates">0</strong></div>
-        <div class="stat"><div class="muted">VIP承認済み</div><strong id="stat-approved">0</strong></div>
-        <div class="stat"><div class="muted">GOLD以上</div><strong id="stat-gold-up">0</strong></div>
+        <div class="stat"><div class="label">会員数</div><strong id="stat-members">0</strong></div>
+        <div class="stat"><div class="label">VIP候補</div><strong id="stat-candidates">0</strong></div>
+        <div class="stat"><div class="label">VIP承認済み</div><strong id="stat-approved">0</strong></div>
+        <div class="stat"><div class="label">GOLD以上</div><strong id="stat-gold-up">0</strong></div>
       </div>
     </section>
 
@@ -85,6 +250,7 @@
             <h3 class="section-title">顧客一覧</h3>
             <button class="ghost" id="refresh-members">更新</button>
           </div>
+
           <div class="filters" style="margin-bottom:12px;">
             <input id="search-q" placeholder="名前 or LINE IDで検索" />
             <select id="filter-vip">
@@ -94,16 +260,21 @@
             <button class="ghost" id="search-btn">検索</button>
             <button class="gold" id="load-candidates">VIP候補表示</button>
           </div>
-          <div style="overflow:auto">
-            <table>
+
+          <div class="mobile-cards">
+            <div id="members-cards" class="member-cards"></div>
+          </div>
+
+          <div class="desktop-table">
+            <table style="width:100%; border-collapse:collapse;">
               <thead>
                 <tr>
-                  <th>名前</th>
-                  <th>ランク</th>
-                  <th>来店</th>
-                  <th>累計</th>
-                  <th>VIP</th>
-                  <th></th>
+                  <th style="padding:12px 10px; color:var(--gold-2); border-bottom:1px solid rgba(255,255,255,.06); text-align:left;">名前</th>
+                  <th style="padding:12px 10px; color:var(--gold-2); border-bottom:1px solid rgba(255,255,255,.06); text-align:left;">ランク</th>
+                  <th style="padding:12px 10px; color:var(--gold-2); border-bottom:1px solid rgba(255,255,255,.06); text-align:left;">来店</th>
+                  <th style="padding:12px 10px; color:var(--gold-2); border-bottom:1px solid rgba(255,255,255,.06); text-align:left;">累計</th>
+                  <th style="padding:12px 10px; color:var(--gold-2); border-bottom:1px solid rgba(255,255,255,.06); text-align:left;">VIP</th>
+                  <th style="padding:12px 10px; color:var(--gold-2); border-bottom:1px solid rgba(255,255,255,.06); text-align:left;"></th>
                 </tr>
               </thead>
               <tbody id="members-body"></tbody>
@@ -112,24 +283,11 @@
         </section>
 
         <section class="panel">
-          <h3 class="section-title">クーポン一覧</h3>
-          <div class="actions" style="margin-bottom:12px;">
-            <button class="ghost" id="load-coupons-btn">クーポン更新</button>
+          <div class="split">
+            <h3 class="section-title">クーポン一覧</h3>
+            <button class="ghost" id="load-coupons-btn">更新</button>
           </div>
-          <div style="overflow:auto">
-            <table>
-              <thead>
-                <tr>
-                  <th>タイトル</th>
-                  <th>対象</th>
-                  <th>期限</th>
-                  <th>状態</th>
-                  <th></th>
-                </tr>
-              </thead>
-              <tbody id="coupon-list-body"></tbody>
-            </table>
-          </div>
+          <div id="coupon-cards" class="coupon-cards"></div>
           <div id="coupon-list-message" class="message"></div>
         </section>
 
@@ -162,15 +320,36 @@
           <h3 class="section-title">顧客詳細</h3>
           <div id="detail-empty" class="muted">左の一覧から顧客を選択してください。</div>
           <div id="detail-box" class="hidden">
-            <div class="stack">
-              <div class="split"><strong id="detail-name">-</strong><span id="detail-rank" class="pill">-</span></div>
-              <div class="muted" id="detail-line">-</div>
-              <div class="split"><span>総来店数</span><strong id="detail-visits">0</strong></div>
-              <div class="split"><span>累計利用額</span><strong id="detail-total">¥0</strong></div>
-              <div class="split"><span>VIP状態</span><strong id="detail-vip">none</strong></div>
+            <div class="split" style="margin-bottom:12px;">
+              <div>
+                <div style="font-size:24px; font-weight:800;" id="detail-name">-</div>
+                <div class="muted" id="detail-line">-</div>
+              </div>
+              <span id="detail-rank" class="pill">-</span>
             </div>
-            <hr style="border-color:rgba(255,255,255,.06); margin:16px 0;">
-            <h4 style="margin:0 0 10px; color:var(--gold-2);">来店追加</h4>
+
+            <div class="detail-grid">
+              <div class="detail-stat">
+                <div class="label">総来店数</div>
+                <strong id="detail-visits">0回</strong>
+              </div>
+              <div class="detail-stat">
+                <div class="label">累計利用額</div>
+                <strong id="detail-total">¥0</strong>
+              </div>
+              <div class="detail-stat">
+                <div class="label">VIP状態</div>
+                <strong id="detail-vip">なし</strong>
+              </div>
+              <div class="detail-stat">
+                <div class="label">memberId</div>
+                <strong id="detail-id">-</strong>
+              </div>
+            </div>
+
+            <div class="hr"></div>
+
+            <h3 class="section-title">来店追加</h3>
             <div class="form-grid two">
               <input id="visit-date" placeholder="2026-03-17" />
               <input id="visit-spent" type="number" placeholder="利用金額" />
@@ -181,9 +360,11 @@
               <button class="gold" id="add-visit-btn">来店を追加</button>
             </div>
             <div id="visit-message" class="message"></div>
-            <hr style="border-color:rgba(255,255,255,.06); margin:16px 0;">
-            <h4 style="margin:0 0 10px; color:var(--gold-2);">VIP操作</h4>
-            <textarea id="vip-note" placeholder="承認/却下メモ"></textarea>
+
+            <div class="hr"></div>
+
+            <h3 class="section-title">VIP操作</h3>
+            <textarea id="vip-note" placeholder="承認 / 却下メモ"></textarea>
             <div class="actions">
               <button class="gold" id="approve-vip-btn">VIP承認</button>
               <button class="danger" id="reject-vip-btn">VIP却下</button>
@@ -197,6 +378,7 @@
 
   <script>
     const state = { members: [], selected: null };
+
     const apiBaseInput = document.getElementById('api-base');
     const adminTokenInput = document.getElementById('admin-token');
     apiBaseInput.value = localStorage.getItem('hall_api_base') || 'https://hall-loyalty-api.hallshisha.workers.dev';
@@ -251,55 +433,95 @@
 
     function renderMembers() {
       const tbody = document.getElementById('members-body');
+      const cards = document.getElementById('members-cards');
       tbody.innerHTML = '';
+      cards.innerHTML = '';
+
       if (!state.members.length) {
-        tbody.innerHTML = '<tr><td colspan="6" class="muted">データがありません</td></tr>';
+        tbody.innerHTML = '<tr><td colspan="6" class="muted" style="padding:12px 10px;">データがありません</td></tr>';
+        cards.innerHTML = '<div class="muted">データがありません</div>';
         renderStats();
         return;
       }
+
       state.members.forEach((m) => {
         const tr = document.createElement('tr');
         tr.innerHTML = `
-          <td><strong>${m.name}</strong><div class="muted">${m.line_user_id}</div></td>
-          <td>${m.rank}</td>
-          <td>${m.total_visits}回</td>
-          <td>${yen(m.total_spent)}</td>
-          <td><span class="pill">${vipText(m.vip_status)}</span></td>
-          <td><button class="ghost" data-id="${m.id}">詳細</button></td>
+          <td style="padding:12px 10px; border-bottom:1px solid rgba(255,255,255,.06);"><strong>${m.name}</strong><div class="muted">${m.line_user_id}</div></td>
+          <td style="padding:12px 10px; border-bottom:1px solid rgba(255,255,255,.06);">${m.rank}</td>
+          <td style="padding:12px 10px; border-bottom:1px solid rgba(255,255,255,.06);">${m.total_visits}回</td>
+          <td style="padding:12px 10px; border-bottom:1px solid rgba(255,255,255,.06);">${yen(m.total_spent)}</td>
+          <td style="padding:12px 10px; border-bottom:1px solid rgba(255,255,255,.06);"><span class="pill">${vipText(m.vip_status)}</span></td>
+          <td style="padding:12px 10px; border-bottom:1px solid rgba(255,255,255,.06);"><button class="ghost" data-id="${m.id}">詳細</button></td>
         `;
         tbody.appendChild(tr);
+
+        const card = document.createElement('div');
+        card.className = 'member-card';
+        card.innerHTML = `
+          <div class="member-card-top">
+            <div>
+              <div class="member-name">${m.name}</div>
+              <div class="line-id">${m.line_user_id}</div>
+            </div>
+            <div class="actions">
+              <span class="pill">${m.rank}</span>
+              <span class="pill">${vipText(m.vip_status)}</span>
+            </div>
+          </div>
+          <div class="member-meta">
+            <div class="meta-box"><div class="label">来店</div><strong>${m.total_visits}</strong></div>
+            <div class="meta-box"><div class="label">累計</div><strong>${yen(m.total_spent)}</strong></div>
+            <div class="meta-box"><div class="label">ID</div><strong>${m.id}</strong></div>
+          </div>
+          <div class="actions">
+            <button class="ghost" data-id="${m.id}">詳細を見る</button>
+          </div>
+        `;
+        cards.appendChild(card);
       });
-      tbody.querySelectorAll('button[data-id]').forEach((btn) => {
+
+      document.querySelectorAll('button[data-id]').forEach((btn) => {
         btn.addEventListener('click', () => selectMember(btn.dataset.id));
       });
+
       renderStats();
     }
 
     function renderCoupons(coupons) {
-      const tbody = document.getElementById('coupon-list-body');
-      tbody.innerHTML = '';
+      const cards = document.getElementById('coupon-cards');
+      cards.innerHTML = '';
+
       if (!coupons.length) {
-        tbody.innerHTML = '<tr><td colspan="5" class="muted">クーポンがありません</td></tr>';
+        cards.innerHTML = '<div class="muted">クーポンがありません</div>';
         return;
       }
 
       coupons.forEach((coupon) => {
-        const tr = document.createElement('tr');
-        tr.innerHTML = `
-          <td><strong>${coupon.title}</strong><div class="muted">${coupon.description || ''}</div></td>
-          <td>${couponTargetText(coupon)}</td>
-          <td>${couponExpiryText(coupon)}</td>
-          <td><span class="pill">${couponStatusText(coupon)}</span></td>
-          <td>
+        const card = document.createElement('div');
+        card.className = 'coupon-card';
+        card.innerHTML = `
+          <div class="coupon-card-top">
+            <div>
+              <div class="coupon-title">${coupon.title}</div>
+              <div class="coupon-desc">${coupon.description || ''}</div>
+            </div>
+            <span class="pill">${couponStatusText(coupon)}</span>
+          </div>
+          <div class="coupon-badges">
+            <span class="pill">${couponTargetText(coupon)}</span>
+            <span class="pill">期限 ${couponExpiryText(coupon)}</span>
+          </div>
+          <div class="actions" style="margin-top:12px;">
             ${Number(coupon.is_active || 0) === 1
               ? `<button class="danger" data-coupon-disable="${coupon.id}">無効化</button>`
-              : `<span class="muted">-</span>`}
-          </td>
+              : `<button class="ghost" disabled>無効済み</button>`}
+          </div>
         `;
-        tbody.appendChild(tr);
+        cards.appendChild(card);
       });
 
-      tbody.querySelectorAll('button[data-coupon-disable]').forEach((btn) => {
+      cards.querySelectorAll('button[data-coupon-disable]').forEach((btn) => {
         btn.addEventListener('click', () => deactivateCoupon(btn.dataset.couponDisable));
       });
     }
@@ -362,6 +584,7 @@
       document.getElementById('detail-visits').textContent = `${data.member.total_visits}回`;
       document.getElementById('detail-total').textContent = yen(data.member.total_spent);
       document.getElementById('detail-vip').textContent = vipText(data.member.vip_status);
+      document.getElementById('detail-id').textContent = data.member.id;
       document.getElementById('coupon-member-id').value = data.member.id;
     }
 
