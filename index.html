@@ -1,1 +1,827 @@
-<!-- QR付き index.html（前回送付と同一想定） -->
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SHISHA CAFE HALL</title>
+  <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+  <style>
+    :root{
+      --bg:#050505;
+      --panel:#0d0d0d;
+      --panel2:#121212;
+      --line:rgba(212,175,55,.28);
+      --gold:#d4af37;
+      --gold2:#f1de94;
+      --text:#ffffff;
+      --muted:#a8a8a8;
+      --danger:#ff8f8f;
+    }
+    *{box-sizing:border-box}
+    html,body{
+      margin:0;
+      background:
+        radial-gradient(circle at top right, rgba(212,175,55,.14), transparent 28%),
+        linear-gradient(180deg,#0a0a0a 0%, #030303 100%);
+      color:var(--text);
+      font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Yu Gothic",sans-serif;
+    }
+    body{
+      min-height:100vh;
+    }
+    .wrap{
+      max-width:900px;
+      margin:0 auto;
+      padding:22px 16px 120px;
+    }
+    .topbar{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:12px;
+      margin-bottom:18px;
+    }
+    .brand{
+      font-size:30px;
+      font-weight:900;
+      letter-spacing:.06em;
+      color:var(--gold2);
+      line-height:1.1;
+    }
+    .line-badge{
+      border:1px solid var(--line);
+      color:var(--gold2);
+      background:rgba(212,175,55,.06);
+      padding:14px 18px;
+      border-radius:999px;
+      font-weight:800;
+      white-space:nowrap;
+      max-width:52%;
+      overflow:hidden;
+      text-overflow:ellipsis;
+      font-size:14px;
+    }
+    .panel{
+      position:relative;
+      background:
+        radial-gradient(circle at top right, rgba(212,175,55,.10), transparent 36%),
+        linear-gradient(180deg, rgba(212,175,55,.04), rgba(212,175,55,0) 26%),
+        var(--panel);
+      border:1px solid var(--line);
+      border-radius:26px;
+      padding:18px;
+      margin-bottom:18px;
+      overflow:hidden;
+    }
+    .panel-title{
+      margin:0 0 14px;
+      font-size:16px;
+      font-weight:900;
+      color:var(--gold2);
+    }
+    .member-card{
+      min-height:210px;
+    }
+    .member-label{
+      font-size:15px;
+      color:#d9d9d9;
+      margin-bottom:6px;
+      font-weight:700;
+    }
+    .member-name{
+      font-size:28px;
+      font-weight:900;
+      margin:0 0 14px;
+      word-break:break-word;
+    }
+    .member-rank{
+      color:var(--gold2);
+      font-size:22px;
+      font-weight:900;
+      margin-bottom:14px;
+    }
+    .member-main{
+      display:flex;
+      justify-content:space-between;
+      align-items:flex-start;
+      gap:12px;
+      margin-bottom:12px;
+    }
+    .point{
+      font-size:84px;
+      line-height:1;
+      font-weight:900;
+      letter-spacing:-.03em;
+    }
+    .point small{
+      font-size:.44em;
+      color:var(--gold2);
+      font-weight:900;
+      margin-left:4px;
+    }
+    .next-rank{
+      align-self:flex-start;
+      border:1px solid var(--line);
+      background:rgba(212,175,55,.06);
+      color:var(--gold2);
+      padding:12px 18px;
+      border-radius:999px;
+      font-weight:900;
+      font-size:18px;
+      white-space:nowrap;
+    }
+    .subtext{
+      color:#d6d6d6;
+      font-size:18px;
+      font-weight:800;
+      margin:6px 0 14px;
+    }
+    .progress{
+      width:100%;
+      height:22px;
+      border-radius:999px;
+      background:rgba(255,255,255,.08);
+      overflow:hidden;
+      border:1px solid rgba(255,255,255,.04);
+    }
+    .progress-bar{
+      height:100%;
+      width:0%;
+      background:linear-gradient(90deg,var(--gold),var(--gold2));
+      border-radius:999px;
+      transition:width .25s ease;
+    }
+    .menu-grid{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:16px;
+    }
+    .menu-card{
+      background:rgba(255,255,255,.02);
+      border:1px solid var(--line);
+      border-radius:22px;
+      padding:18px;
+      min-height:118px;
+      display:flex;
+      flex-direction:column;
+      justify-content:center;
+      cursor:pointer;
+    }
+    .menu-card-title{
+      font-size:20px;
+      font-weight:900;
+      margin-bottom:10px;
+      color:#fff;
+    }
+    .menu-card-sub{
+      color:#c5c5c5;
+      font-size:14px;
+      line-height:1.5;
+      font-weight:700;
+    }
+    .coupon-list,.history-list{
+      display:flex;
+      flex-direction:column;
+      gap:14px;
+    }
+    .coupon-card,.history-card,.profile-card,.vip-card{
+      background:rgba(255,255,255,.02);
+      border:1px solid var(--line);
+      border-radius:22px;
+      padding:18px;
+    }
+    .coupon-title,.history-title{
+      font-size:18px;
+      font-weight:900;
+      margin-bottom:8px;
+      color:var(--gold2);
+    }
+    .coupon-desc,.history-desc,.profile-row{
+      color:#eaeaea;
+      font-size:16px;
+      line-height:1.6;
+      font-weight:700;
+    }
+    .coupon-footer,.history-footer{
+      margin-top:14px;
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:10px;
+      flex-wrap:wrap;
+    }
+    .pill{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      min-height:42px;
+      padding:8px 16px;
+      border-radius:999px;
+      border:1px solid var(--line);
+      background:rgba(212,175,55,.06);
+      color:var(--gold2);
+      font-weight:900;
+      font-size:15px;
+    }
+    .use-btn{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      min-height:54px;
+      padding:0 22px;
+      border:none;
+      border-radius:999px;
+      background:linear-gradient(90deg,var(--gold),var(--gold2));
+      color:#111;
+      font-weight:900;
+      font-size:18px;
+    }
+    .register-panel input{
+      width:100%;
+      margin-top:12px;
+      background:#0a0a0a;
+      border:1px solid rgba(255,255,255,.10);
+      color:#fff;
+      padding:18px 16px;
+      border-radius:18px;
+      font-size:18px;
+      outline:none;
+    }
+    .primary-btn{
+      width:fit-content;
+      min-width:140px;
+      margin-top:14px;
+      background:linear-gradient(90deg,var(--gold),var(--gold2));
+      color:#111;
+      border:none;
+      padding:16px 26px;
+      border-radius:999px;
+      font-weight:900;
+      font-size:18px;
+    }
+    .msg{
+      margin-top:12px;
+      font-size:15px;
+      font-weight:800;
+    }
+    .msg.ok{color:#bce9c7}
+    .msg.ng{color:var(--danger)}
+    .hidden{display:none!important}
+    .bottom-nav{
+      position:fixed;
+      left:50%;
+      transform:translateX(-50%);
+      bottom:18px;
+      width:min(900px,calc(100% - 24px));
+      background:rgba(10,10,10,.95);
+      border:1px solid var(--line);
+      border-radius:26px;
+      padding:10px;
+      display:grid;
+      grid-template-columns:repeat(4,1fr);
+      gap:10px;
+      z-index:99;
+      backdrop-filter:blur(12px);
+    }
+    .nav-btn{
+      min-height:58px;
+      border-radius:20px;
+      border:1px solid transparent;
+      background:transparent;
+      color:#e6e6e6;
+      font-size:18px;
+      font-weight:900;
+    }
+    .nav-btn.active{
+      border-color:var(--line);
+      background:rgba(212,175,55,.10);
+      color:var(--gold2);
+    }
+    .empty{
+      color:#b9b9b9;
+      font-size:16px;
+      font-weight:700;
+      line-height:1.7;
+    }
+    .vip-hero{
+      display:flex;
+      justify-content:space-between;
+      align-items:flex-start;
+      gap:12px;
+      margin-bottom:14px;
+    }
+    .vip-badge{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      padding:10px 18px;
+      border-radius:999px;
+      background:linear-gradient(90deg,#7c58ff,#c39bff);
+      color:#fff;
+      font-weight:900;
+      font-size:16px;
+    }
+    .vip-note{
+      color:#d9d9d9;
+      font-size:16px;
+      font-weight:700;
+      line-height:1.7;
+    }
+
+    .qr-wrap{
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      justify-content:center;
+      gap:12px;
+      padding:6px 0 2px;
+    }
+    .qr-box{
+      background:#fff;
+      padding:14px;
+      border-radius:18px;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      min-width:190px;
+      min-height:190px;
+    }
+    .qr-caption{
+      color:#d6d6d6;
+      font-size:14px;
+      font-weight:700;
+      text-align:center;
+      line-height:1.6;
+    }
+
+    @media (max-width: 700px){
+      .brand{font-size:24px}
+      .line-badge{
+        max-width:56%;
+        font-size:13px;
+        padding:12px 14px;
+      }
+      .member-main{
+        flex-direction:column;
+        align-items:flex-start;
+      }
+      .next-rank{
+        font-size:16px;
+      }
+      .point{
+        font-size:68px;
+      }
+      .menu-grid{
+        grid-template-columns:1fr 1fr;
+        gap:12px;
+      }
+      .menu-card{
+        min-height:104px;
+        padding:16px;
+      }
+      .menu-card-title{
+        font-size:17px;
+      }
+      .menu-card-sub{
+        font-size:13px;
+      }
+      .subtext{
+        font-size:16px;
+      }
+      .nav-btn{
+        font-size:16px;
+        min-height:54px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="topbar">
+      <div class="brand">SHISHA CAFE HALL</div>
+      <div class="line-badge" id="lineUserBadge">LINE ID: 読み込み中</div>
+    </div>
+
+    <section id="view-register" class="panel register-panel hidden">
+      <h3 class="panel-title">会員登録</h3>
+      <div class="empty">LINEから来たお客様向けの会員ページです。</div>
+      <input id="registerName" type="text" placeholder="お名前を入力" />
+      <button class="primary-btn" id="registerBtn">登録する</button>
+      <div id="registerMsg" class="msg"></div>
+    </section>
+
+    <section id="view-home" class="view hidden">
+      <div class="panel member-card">
+        <div class="member-label">会員証</div>
+        <div class="member-name" id="memberName">-</div>
+        <div class="member-rank" id="memberRank">SMOKE</div>
+
+        <div class="member-main">
+          <div>
+            <div class="point"><span id="memberPoints">0</span><small>pt</small></div>
+          </div>
+          <div class="next-rank" id="nextRankLabel">NEXT BRONZE</div>
+        </div>
+
+        <div class="subtext" id="nextRankText">次のランクまであと 3回</div>
+        <div class="progress">
+          <div class="progress-bar" id="rankProgressBar"></div>
+        </div>
+      </div>
+
+      <div class="panel">
+        <h3 class="panel-title">会員QR</h3>
+        <div class="qr-wrap">
+          <div class="qr-box">
+            <div id="memberQr"></div>
+          </div>
+          <div class="qr-caption">
+            来店時にこのQRをスタッフへご提示ください
+          </div>
+        </div>
+      </div>
+
+      <div class="panel">
+        <h3 class="panel-title">メニュー</h3>
+        <div class="menu-grid">
+          <div class="menu-card" data-go="vip">
+            <div class="menu-card-title">VIP進捗</div>
+            <div class="menu-card-sub">来店回数・累計利用額</div>
+          </div>
+          <div class="menu-card" data-go="coupons">
+            <div class="menu-card-title">クーポン</div>
+            <div class="menu-card-sub">利用可能クーポン一覧</div>
+          </div>
+          <div class="menu-card" data-go="history">
+            <div class="menu-card-title">来店履歴</div>
+            <div class="menu-card-sub">直近30件</div>
+          </div>
+          <div class="menu-card" data-go="profile">
+            <div class="menu-card-title">プロフィール</div>
+            <div class="menu-card-sub">会員情報の確認</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="view-vip" class="view hidden">
+      <div class="panel vip-card">
+        <div class="vip-hero">
+          <div>
+            <h3 class="panel-title">VIP進捗</h3>
+            <div class="vip-note" id="vipStatusText">通常会員</div>
+          </div>
+          <div id="vipBadgeWrap" class="hidden">
+            <div class="vip-badge">VIP</div>
+          </div>
+        </div>
+
+        <div class="profile-card">
+          <div class="profile-row">累計利用額：<span id="vipTotalSpent">¥0</span></div>
+          <div class="profile-row">総来店数：<span id="vipVisits">0回</span></div>
+          <div class="profile-row">VIP状態：<span id="vipStatusLabel">なし</span></div>
+        </div>
+
+        <div class="coupon-footer" style="margin-top:16px;">
+          <span class="pill">VIP基準：累計20万円以上</span>
+          <span class="pill" id="vipRemainText">あと ¥200,000</span>
+        </div>
+
+        <div class="progress" style="margin-top:16px;">
+          <div class="progress-bar" id="vipProgressBar"></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="view-coupons" class="view hidden">
+      <div class="panel">
+        <h3 class="panel-title">クーポン一覧</h3>
+        <div id="couponList" class="coupon-list"></div>
+        <div id="couponEmpty" class="empty hidden">利用可能なクーポンはありません。</div>
+      </div>
+    </section>
+
+    <section id="view-history" class="view hidden">
+      <div class="panel">
+        <h3 class="panel-title">来店履歴</h3>
+        <div id="historyList" class="history-list"></div>
+        <div id="historyEmpty" class="empty hidden">来店履歴はまだありません。</div>
+      </div>
+    </section>
+
+    <section id="view-profile" class="view hidden">
+      <div class="panel">
+        <h3 class="panel-title">プロフィール</h3>
+        <div class="profile-card">
+          <div class="profile-row">お名前：<span id="profileName">-</span></div>
+          <div class="profile-row">LINE ID：<span id="profileLineId">-</span></div>
+          <div class="profile-row">ランク：<span id="profileRank">-</span></div>
+          <div class="profile-row">ポイント：<span id="profilePoints">0pt</span></div>
+          <div class="profile-row">来店回数：<span id="profileVisits">0回</span></div>
+          <div class="profile-row">累計利用額：<span id="profileSpent">¥0</span></div>
+          <div class="profile-row">VIP状態：<span id="profileVip">なし</span></div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <nav class="bottom-nav hidden" id="bottomNav">
+    <button class="nav-btn active" data-tab="home">ホーム</button>
+    <button class="nav-btn" data-tab="vip">VIP</button>
+    <button class="nav-btn" data-tab="coupons">クーポン</button>
+    <button class="nav-btn" data-tab="history">履歴</button>
+  </nav>
+
+  <script>
+    const API_BASE = "https://hall-loyalty-api.hallshisha.workers.dev";
+    const LIFF_ID = "2009509317-b3BuEvqf";
+
+    let lineUserId = null;
+    let currentMember = null;
+    let currentCoupons = [];
+    let currentVisits = [];
+
+    const rankOrder = ["SMOKE", "BRONZE", "SILVER", "GOLD", "DIAMOND"];
+    const rankVisitThreshold = {
+      SMOKE: 0,
+      BRONZE: 3,
+      SILVER: 8,
+      GOLD: 15,
+      DIAMOND: 25
+    };
+
+    function yen(v) {
+      return "¥" + Number(v || 0).toLocaleString("ja-JP");
+    }
+
+    function vipText(vipStatus) {
+      if (vipStatus === "approved") return "承認済み";
+      if (vipStatus === "candidate") return "候補";
+      return "なし";
+    }
+
+    function showView(name) {
+      document.querySelectorAll(".view").forEach(v => v.classList.add("hidden"));
+      const target = document.getElementById("view-" + name);
+      if (target) target.classList.remove("hidden");
+
+      document.querySelectorAll(".nav-btn").forEach(btn => {
+        btn.classList.toggle("active", btn.dataset.tab === name);
+      });
+    }
+
+    function enableAppViews() {
+      document.getElementById("bottomNav").classList.remove("hidden");
+      showView("home");
+    }
+
+    function getNextRankInfo(rank, totalVisits) {
+      const currentIndex = rankOrder.indexOf(rank);
+      if (currentIndex === -1 || currentIndex === rankOrder.length - 1) {
+        return {
+          nextRank: "MAX",
+          remain: 0,
+          percent: 100
+        };
+      }
+
+      const nextRank = rankOrder[currentIndex + 1];
+      const currentNeed = rankVisitThreshold[rank];
+      const nextNeed = rankVisitThreshold[nextRank];
+      const remain = Math.max(0, nextNeed - Number(totalVisits || 0));
+      const base = Number(totalVisits || 0) - currentNeed;
+      const range = nextNeed - currentNeed;
+      const percent = Math.max(0, Math.min(100, (base / range) * 100));
+
+      return { nextRank, remain, percent };
+    }
+
+    function renderMemberQr() {
+      const qrEl = document.getElementById("memberQr");
+      qrEl.innerHTML = "";
+
+      if (!lineUserId) return;
+
+      new QRCode(qrEl, {
+        text: "HALL|" + lineUserId,
+        width: 160,
+        height: 160,
+        colorDark: "#000000",
+        colorLight: "#ffffff",
+        correctLevel: QRCode.CorrectLevel.M
+      });
+    }
+
+    function renderHome(member) {
+      const next = getNextRankInfo(member.rank, member.total_visits);
+
+      document.getElementById("memberName").textContent = member.name || "-";
+      document.getElementById("memberRank").textContent = member.rank || "SMOKE";
+      document.getElementById("memberPoints").textContent = Number(member.total_points || 0);
+
+      if (next.nextRank === "MAX") {
+        document.getElementById("nextRankLabel").textContent = "MAX RANK";
+        document.getElementById("nextRankText").textContent = "最高ランク到達済み";
+        document.getElementById("rankProgressBar").style.width = "100%";
+      } else {
+        document.getElementById("nextRankLabel").textContent = "NEXT " + next.nextRank;
+        document.getElementById("nextRankText").textContent = "次のランクまであと " + next.remain + "回";
+        document.getElementById("rankProgressBar").style.width = next.percent + "%";
+      }
+
+      renderMemberQr();
+    }
+
+    function renderCoupons(coupons) {
+      const list = document.getElementById("couponList");
+      const empty = document.getElementById("couponEmpty");
+      list.innerHTML = "";
+
+      if (!coupons || !coupons.length) {
+        empty.classList.remove("hidden");
+        return;
+      }
+
+      empty.classList.add("hidden");
+
+      coupons.forEach(c => {
+        const card = document.createElement("div");
+        card.className = "coupon-card";
+        card.innerHTML = `
+          <div class="coupon-title">${c.title || ""}</div>
+          <div class="coupon-desc">${c.description || ""}</div>
+          <div class="coupon-footer">
+            <span class="pill">期限 ${c.expires_at || "-"}</span>
+            <button class="use-btn" type="button">店舗で使用</button>
+          </div>
+        `;
+        list.appendChild(card);
+      });
+    }
+
+    function renderHistory(visits) {
+      const list = document.getElementById("historyList");
+      const empty = document.getElementById("historyEmpty");
+      list.innerHTML = "";
+
+      if (!visits || !visits.length) {
+        empty.classList.remove("hidden");
+        return;
+      }
+
+      empty.classList.add("hidden");
+
+      visits.forEach(v => {
+        const card = document.createElement("div");
+        card.className = "history-card";
+        card.innerHTML = `
+          <div class="history-title">${v.visit_date || v.created_at || "-"}</div>
+          <div class="history-desc">利用金額：${yen(v.spent_amount || v.amount || 0)}</div>
+          <div class="history-desc">付与ポイント：${Number(v.points_added || 0)}pt</div>
+          <div class="history-desc">${v.note || v.memo || ""}</div>
+        `;
+        list.appendChild(card);
+      });
+    }
+
+    function renderProfile(member) {
+      document.getElementById("profileName").textContent = member.name || "-";
+      document.getElementById("profileLineId").textContent = member.line_user_id || "-";
+      document.getElementById("profileRank").textContent = member.rank || "-";
+      document.getElementById("profilePoints").textContent = Number(member.total_points || 0) + "pt";
+      document.getElementById("profileVisits").textContent = Number(member.total_visits || 0) + "回";
+      document.getElementById("profileSpent").textContent = yen(member.total_spent || 0);
+      document.getElementById("profileVip").textContent = vipText(member.vip_status);
+    }
+
+    function renderVip(member) {
+      const spent = Number(member.total_spent || 0);
+      const threshold = 200000;
+      const percent = Math.max(0, Math.min(100, (spent / threshold) * 100));
+      const remain = Math.max(0, threshold - spent);
+
+      document.getElementById("vipTotalSpent").textContent = yen(spent);
+      document.getElementById("vipVisits").textContent = Number(member.total_visits || 0) + "回";
+      document.getElementById("vipStatusLabel").textContent = vipText(member.vip_status);
+      document.getElementById("vipProgressBar").style.width = percent + "%";
+
+      if (member.vip_status === "approved") {
+        document.getElementById("vipStatusText").textContent = "VIP会員です。特典をご利用いただけます。";
+        document.getElementById("vipRemainText").textContent = "VIP承認済み";
+        document.getElementById("vipBadgeWrap").classList.remove("hidden");
+      } else if (member.vip_status === "candidate") {
+        document.getElementById("vipStatusText").textContent = "VIP候補です。店舗側の承認をお待ちください。";
+        document.getElementById("vipRemainText").textContent = "VIP候補到達";
+        document.getElementById("vipBadgeWrap").classList.add("hidden");
+      } else {
+        document.getElementById("vipStatusText").textContent = "累計利用額20万円以上でVIP候補になります。";
+        document.getElementById("vipRemainText").textContent = "あと " + yen(remain);
+        document.getElementById("vipBadgeWrap").classList.add("hidden");
+      }
+    }
+
+    async function fetchMember() {
+      const res = await fetch(API_BASE + "/api/public/member?lineUserId=" + encodeURIComponent(lineUserId));
+      const data = await res.json();
+
+      if (!data.ok && !data.member) {
+        throw new Error(data.error || "member load error");
+      }
+
+      if (!data.member) {
+        document.getElementById("view-register").classList.remove("hidden");
+        document.getElementById("bottomNav").classList.add("hidden");
+        document.querySelectorAll(".view").forEach(v => v.classList.add("hidden"));
+        return;
+      }
+
+      currentMember = data.member;
+      currentCoupons = data.coupons || [];
+      currentVisits = data.visits || [];
+
+      document.getElementById("view-register").classList.add("hidden");
+
+      renderHome(currentMember);
+      renderCoupons(currentCoupons);
+      renderHistory(currentVisits);
+      renderProfile(currentMember);
+      renderVip(currentMember);
+      enableAppViews();
+    }
+
+    async function registerMember() {
+      const name = document.getElementById("registerName").value.trim();
+      const msg = document.getElementById("registerMsg");
+
+      if (!name) {
+        msg.textContent = "名前を入力してください";
+        msg.className = "msg ng";
+        return;
+      }
+
+      const res = await fetch(API_BASE + "/api/public/register", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          lineUserId,
+          name
+        })
+      });
+
+      const data = await res.json();
+
+      if (!data.ok) {
+        msg.textContent = data.error || "登録に失敗しました";
+        msg.className = "msg ng";
+        return;
+      }
+
+      msg.textContent = "登録完了";
+      msg.className = "msg ok";
+      await fetchMember();
+    }
+
+    async function initLiffApp() {
+      await liff.init({
+        liffId: LIFF_ID,
+        withLoginOnExternalBrowser: true
+      });
+
+      if (!liff.isLoggedIn()) {
+        liff.login();
+        return;
+      }
+
+      const profile = await liff.getProfile();
+      lineUserId = profile.userId;
+
+      document.getElementById("lineUserBadge").textContent = "LINE ID: " + lineUserId;
+      await fetchMember();
+    }
+
+    document.getElementById("registerBtn").addEventListener("click", registerMember);
+
+    document.querySelectorAll(".nav-btn").forEach(btn => {
+      btn.addEventListener("click", () => {
+        showView(btn.dataset.tab);
+      });
+    });
+
+    document.querySelectorAll(".menu-card").forEach(card => {
+      card.addEventListener("click", () => {
+        showView(card.dataset.go);
+      });
+    });
+
+    initLiffApp().catch(err => {
+      document.getElementById("view-register").classList.remove("hidden");
+      const msg = document.getElementById("registerMsg");
+      msg.textContent = "LINE初期化エラー: " + err.message;
+      msg.className = "msg ng";
+    });
+  </script>
+</body>
+</html>
