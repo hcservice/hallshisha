@@ -4,6 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>SHISHA CAFE HALL | 管理画面</title>
+  <script src="https://unpkg.com/html5-qrcode"></script>
   <style>
     :root {
       --bg: #0b0b0b;
@@ -89,6 +90,7 @@
     }
     .stat .label { color: var(--muted); font-size: 13px; }
     .stat strong { display:block; font-size: 30px; margin-top: 8px; }
+
     input, select, textarea {
       width:100%;
       background:#0f0f0f;
@@ -100,6 +102,7 @@
       outline: none;
     }
     textarea { min-height:100px; resize:vertical; }
+
     button {
       border:0;
       border-radius:16px;
@@ -111,12 +114,14 @@
     .gold { background: linear-gradient(90deg, var(--gold), var(--gold-2)); color:#111; }
     .ghost { background: rgba(212,175,55,.08); color:#fff; border:1px solid var(--line); }
     .danger { background: rgba(240,107,107,.12); color:#ffd7d7; border:1px solid rgba(240,107,107,.3); }
+
     .filters, .form-grid { display:grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; }
     .form-grid.two { grid-template-columns: repeat(2, minmax(0, 1fr)); }
     .actions { display:flex; gap:8px; flex-wrap:wrap; }
     .message { font-size:13px; margin-top:8px; color: var(--muted); }
     .ok { color: #b5efc3; }
     .ng { color: #ffc0c0; }
+
     .pill {
       display:inline-flex;
       align-items:center;
@@ -133,24 +138,28 @@
     .split { display:flex; justify-content:space-between; gap:10px; align-items:center; }
     .muted { color: var(--muted); }
     .hidden { display:none !important; }
-    .member-cards, .coupon-cards {
+
+    .member-cards, .coupon-cards, .checkin-cards {
       display:flex;
       flex-direction:column;
       gap:10px;
     }
-    .member-card, .coupon-card {
+
+    .member-card, .coupon-card, .checkin-card {
       background: #101010;
       border: 1px solid rgba(255,255,255,.05);
       border-radius: 18px;
       padding: 14px;
     }
-    .member-card-top, .coupon-card-top {
+
+    .member-card-top, .coupon-card-top, .checkin-card-top {
       display:flex;
       justify-content:space-between;
       gap:10px;
       align-items:flex-start;
       margin-bottom: 8px;
     }
+
     .member-name, .coupon-title { font-size: 18px; font-weight: 800; }
     .line-id, .coupon-desc {
       color: var(--muted);
@@ -158,12 +167,14 @@
       margin-top: 4px;
       word-break: break-all;
     }
+
     .member-meta {
       display:grid;
       grid-template-columns: repeat(3, minmax(0, 1fr));
       gap:8px;
       margin: 12px 0;
     }
+
     .meta-box {
       background: rgba(255,255,255,.025);
       border: 1px solid rgba(255,255,255,.05);
@@ -172,6 +183,7 @@
     }
     .meta-box .label { color: var(--muted); font-size: 12px; }
     .meta-box strong { display:block; margin-top: 6px; font-size: 18px; }
+
     .detail-grid {
       display:grid;
       grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -185,18 +197,29 @@
     }
     .detail-stat .label { color: var(--muted); font-size: 12px; }
     .detail-stat strong { display:block; margin-top: 8px; font-size: 24px; }
+
     .hr {
       height:1px;
       background: rgba(255,255,255,.06);
       margin:16px 0;
     }
+
     .coupon-badges {
       display:flex;
       gap:8px;
       flex-wrap:wrap;
       margin-top: 10px;
     }
+
     .desktop-table { display:none; }
+
+    #qr-reader {
+      width: 100%;
+      max-width: 480px;
+      margin: 0 auto;
+      overflow: hidden;
+      border-radius: 18px;
+    }
 
     @media (min-width: 901px) {
       body { padding: 24px; }
@@ -212,7 +235,7 @@
       .member-meta { grid-template-columns: 1fr 1fr 1fr; }
       .topbar h1 { font-size: 20px; }
       .panel { padding: 16px; }
-      .member-card-top, .coupon-card-top { flex-direction: column; align-items:flex-start; }
+      .member-card-top, .coupon-card-top, .checkin-card-top { flex-direction: column; align-items:flex-start; }
       .actions button { flex: 1 1 auto; }
       .member-meta strong { font-size: 16px; }
       .detail-stat strong { font-size: 20px; }
@@ -224,7 +247,7 @@
     <div class="topbar">
       <div>
         <h1>SHISHA CAFE HALL 管理画面</h1>
-        <div class="sub">会員・来店・クーポン・VIP管理</div>
+        <div class="sub">会員・来店・クーポン・VIP・QRチェックイン管理</div>
       </div>
       <div class="config-row">
         <input id="api-base" placeholder="API Base" />
@@ -239,12 +262,30 @@
         <div class="stat"><div class="label">会員数</div><strong id="stat-members">0</strong></div>
         <div class="stat"><div class="label">VIP候補</div><strong id="stat-candidates">0</strong></div>
         <div class="stat"><div class="label">VIP承認済み</div><strong id="stat-approved">0</strong></div>
-        <div class="stat"><div class="label">GOLD以上</div><strong id="stat-gold-up">0</strong></div>
+        <div class="stat"><div class="label">チェックイン中</div><strong id="stat-active-checkins">0</strong></div>
       </div>
     </section>
 
     <div class="grid">
       <div>
+        <section class="panel">
+          <div class="split">
+            <h3 class="section-title">QRチェックイン</h3>
+            <div class="actions">
+              <button class="gold" id="start-scan-btn">QR読取開始</button>
+              <button class="ghost" id="stop-scan-btn">停止</button>
+            </div>
+          </div>
+
+          <div id="qr-reader" class="hidden"></div>
+          <div id="scan-result" class="message"></div>
+
+          <div class="hr"></div>
+
+          <h3 class="section-title">チェックイン中一覧</h3>
+          <div id="active-checkins" class="checkin-cards"></div>
+        </section>
+
         <section class="panel">
           <div class="split">
             <h3 class="section-title">顧客一覧</h3>
@@ -317,8 +358,8 @@
 
       <div>
         <section class="panel">
-          <h3 class="section-title">顧客詳細</h3>
-          <div id="detail-empty" class="muted">左の一覧から顧客を選択してください。</div>
+          <h3 class="section-title">顧客詳細 / チェックイン会計</h3>
+          <div id="detail-empty" class="muted">左の一覧から顧客を選択するか、QRを読み取ってください。</div>
           <div id="detail-box" class="hidden">
             <div class="split" style="margin-bottom:12px;">
               <div>
@@ -349,15 +390,23 @@
 
             <div class="hr"></div>
 
-            <h3 class="section-title">来店追加</h3>
+            <h3 class="section-title">チェックイン開始</h3>
+            <div class="actions">
+              <button class="gold" id="start-checkin-btn">この会員をチェックイン</button>
+            </div>
+            <div id="checkin-message" class="message"></div>
+
+            <div class="hr"></div>
+
+            <h3 class="section-title">会計反映</h3>
             <div class="form-grid two">
-              <input id="visit-date" placeholder="2026-03-17" />
+              <input id="settle-checkin-id" placeholder="checkinId" />
               <input id="visit-spent" type="number" placeholder="利用金額" />
               <input id="visit-points" type="number" placeholder="付与ポイント 例:10" value="10" />
               <input id="visit-note" placeholder="メモ" />
             </div>
             <div class="actions" style="margin-top:10px;">
-              <button class="gold" id="add-visit-btn">来店を追加</button>
+              <button class="gold" id="complete-checkin-btn">会計反映して完了</button>
             </div>
             <div id="visit-message" class="message"></div>
 
@@ -377,7 +426,13 @@
   </div>
 
   <script>
-    const state = { members: [], selected: null };
+    const state = {
+      members: [],
+      selected: null,
+      activeCheckins: []
+    };
+
+    let qrScanner = null;
 
     const apiBaseInput = document.getElementById('api-base');
     const adminTokenInput = document.getElementById('admin-token');
@@ -428,7 +483,7 @@
       document.getElementById('stat-members').textContent = members.length;
       document.getElementById('stat-candidates').textContent = members.filter(m => m.vip_status === 'candidate').length;
       document.getElementById('stat-approved').textContent = members.filter(m => m.vip_status === 'approved').length;
-      document.getElementById('stat-gold-up').textContent = members.filter(m => ['GOLD', 'DIAMOND'].includes(m.rank) || m.vip_status === 'approved').length;
+      document.getElementById('stat-active-checkins').textContent = state.activeCheckins.length;
     }
 
     function renderMembers() {
@@ -526,6 +581,48 @@
       });
     }
 
+    function renderActiveCheckins() {
+      const wrap = document.getElementById('active-checkins');
+      wrap.innerHTML = '';
+
+      if (!state.activeCheckins.length) {
+        wrap.innerHTML = '<div class="muted">現在チェックイン中の会員はいません</div>';
+        renderStats();
+        return;
+      }
+
+      state.activeCheckins.forEach((c) => {
+        const card = document.createElement('div');
+        card.className = 'checkin-card';
+        card.innerHTML = `
+          <div class="checkin-card-top">
+            <div>
+              <div class="member-name">${c.name}</div>
+              <div class="line-id">${c.line_user_id}</div>
+            </div>
+            <span class="pill">checkinId ${c.id}</span>
+          </div>
+          <div class="coupon-badges">
+            <span class="pill">${c.checked_in_at || '-'}</span>
+            <span class="pill">${vipText(c.vip_status)}</span>
+          </div>
+          <div class="actions" style="margin-top:12px;">
+            <button class="gold" data-fill-checkin="${c.id}" data-member="${c.member_id}">会計へ</button>
+          </div>
+        `;
+        wrap.appendChild(card);
+      });
+
+      wrap.querySelectorAll('button[data-fill-checkin]').forEach((btn) => {
+        btn.addEventListener('click', async () => {
+          document.getElementById('settle-checkin-id').value = btn.dataset.fillCheckin;
+          await selectMember(btn.dataset.member);
+        });
+      });
+
+      renderStats();
+    }
+
     async function loadMembers() {
       const q = document.getElementById('search-q').value.trim();
       const vipOnly = document.getElementById('filter-vip').value;
@@ -554,6 +651,13 @@
       renderCoupons(data.coupons || []);
       msg.textContent = '';
       msg.className = 'message';
+    }
+
+    async function loadActiveCheckins() {
+      const data = await api('/api/admin/checkins/active');
+      if (!data.ok) return;
+      state.activeCheckins = data.checkins || [];
+      renderActiveCheckins();
     }
 
     async function deactivateCoupon(couponId) {
@@ -588,26 +692,69 @@
       document.getElementById('coupon-member-id').value = data.member.id;
     }
 
-    async function addVisit() {
+    async function startCheckin() {
       if (!state.selected) return alert('顧客を選択してください');
-      const payload = {
-        memberId: state.selected.id,
-        visitDate: document.getElementById('visit-date').value.trim() || new Date().toISOString().slice(0, 10),
-        spentAmount: Number(document.getElementById('visit-spent').value || 0),
-        pointsAdded: Number(document.getElementById('visit-points').value || 10),
-        note: document.getElementById('visit-note').value.trim(),
-      };
-      const data = await api('/api/admin/member/add-visit', { method: 'POST', body: JSON.stringify(payload) });
-      const msg = document.getElementById('visit-message');
+      const data = await api('/api/admin/checkin/start', {
+        method: 'POST',
+        body: JSON.stringify({ memberId: state.selected.id })
+      });
+
+      const msg = document.getElementById('checkin-message');
       if (!data.ok) {
-        msg.textContent = data.error || '追加失敗';
+        msg.textContent = data.error || 'チェックイン失敗';
         msg.className = 'message ng';
         return;
       }
-      msg.textContent = '来店を追加しました';
+
+      document.getElementById('settle-checkin-id').value = data.checkin.id;
+      msg.textContent = `チェックインしました（checkinId: ${data.checkin.id}）`;
       msg.className = 'message ok';
+      await loadActiveCheckins();
+    }
+
+    async function completeCheckin() {
+      const checkinId = Number(document.getElementById('settle-checkin-id').value || 0);
+      const spentAmount = Number(document.getElementById('visit-spent').value || 0);
+      const pointsAdded = Number(document.getElementById('visit-points').value || 10);
+      const note = document.getElementById('visit-note').value.trim();
+
+      const msg = document.getElementById('visit-message');
+
+      if (!checkinId) {
+        msg.textContent = 'checkinIdを入力してください';
+        msg.className = 'message ng';
+        return;
+      }
+
+      const data = await api('/api/admin/checkin/complete', {
+        method: 'POST',
+        body: JSON.stringify({
+          checkinId,
+          spentAmount,
+          pointsAdded,
+          note
+        })
+      });
+
+      if (!data.ok) {
+        msg.textContent = data.error || '会計反映失敗';
+        msg.className = 'message ng';
+        return;
+      }
+
+      msg.textContent = '会計反映して完了しました';
+      msg.className = 'message ok';
+
+      document.getElementById('visit-spent').value = '';
+      document.getElementById('visit-note').value = '';
+      document.getElementById('settle-checkin-id').value = '';
+
       await loadMembers();
-      await selectMember(state.selected.id);
+      await loadActiveCheckins();
+
+      if (state.selected) {
+        await selectMember(state.selected.id);
+      }
     }
 
     async function createCoupon() {
@@ -662,18 +809,80 @@
       await selectMember(state.selected.id);
     }
 
+    async function handleQrDecoded(decodedText) {
+      let lineUserId = decodedText.trim();
+
+      if (lineUserId.startsWith('HALL|')) {
+        lineUserId = lineUserId.split('|')[1];
+      }
+
+      const data = await api(`/api/admin/member/by-line?lineUserId=${encodeURIComponent(lineUserId)}`);
+      const msg = document.getElementById('scan-result');
+
+      if (!data.ok) {
+        msg.textContent = data.error || '会員が見つかりません';
+        msg.className = 'message ng';
+        return;
+      }
+
+      msg.textContent = `読取成功: ${data.member.name}`;
+      msg.className = 'message ok';
+
+      await selectMember(data.member.id);
+    }
+
+    async function startScanner() {
+      const qrReader = document.getElementById('qr-reader');
+      qrReader.classList.remove('hidden');
+
+      if (!qrScanner) {
+        qrScanner = new Html5Qrcode("qr-reader");
+      }
+
+      try {
+        await qrScanner.start(
+          { facingMode: "environment" },
+          { fps: 10, qrbox: 220 },
+          async (decodedText) => {
+            await handleQrDecoded(decodedText);
+            await stopScanner();
+          },
+          () => {}
+        );
+      } catch (e) {
+        const msg = document.getElementById('scan-result');
+        msg.textContent = 'カメラ起動失敗: ' + e.message;
+        msg.className = 'message ng';
+      }
+    }
+
+    async function stopScanner() {
+      const qrReader = document.getElementById('qr-reader');
+      if (qrScanner) {
+        try {
+          await qrScanner.stop();
+          await qrScanner.clear();
+        } catch (e) {}
+      }
+      qrReader.classList.add('hidden');
+    }
+
     document.getElementById('save-config').addEventListener('click', saveConfig);
     document.getElementById('refresh-members').addEventListener('click', loadMembers);
     document.getElementById('search-btn').addEventListener('click', loadMembers);
     document.getElementById('load-candidates').addEventListener('click', loadVipCandidates);
     document.getElementById('load-coupons-btn').addEventListener('click', loadCoupons);
-    document.getElementById('add-visit-btn').addEventListener('click', addVisit);
     document.getElementById('create-coupon').addEventListener('click', createCoupon);
     document.getElementById('approve-vip-btn').addEventListener('click', approveVip);
     document.getElementById('reject-vip-btn').addEventListener('click', rejectVip);
+    document.getElementById('start-checkin-btn').addEventListener('click', startCheckin);
+    document.getElementById('complete-checkin-btn').addEventListener('click', completeCheckin);
+    document.getElementById('start-scan-btn').addEventListener('click', startScanner);
+    document.getElementById('stop-scan-btn').addEventListener('click', stopScanner);
 
     loadMembers();
     loadCoupons();
+    loadActiveCheckins();
   </script>
 </body>
 </html>
