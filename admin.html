@@ -90,7 +90,6 @@
     }
     .stat .label { color: var(--muted); font-size: 13px; }
     .stat strong { display:block; font-size: 30px; margin-top: 8px; }
-
     input, select, textarea {
       width:100%;
       background:#0f0f0f;
@@ -102,7 +101,6 @@
       outline: none;
     }
     textarea { min-height:100px; resize:vertical; }
-
     button {
       border:0;
       border-radius:16px;
@@ -114,14 +112,12 @@
     .gold { background: linear-gradient(90deg, var(--gold), var(--gold-2)); color:#111; }
     .ghost { background: rgba(212,175,55,.08); color:#fff; border:1px solid var(--line); }
     .danger { background: rgba(240,107,107,.12); color:#ffd7d7; border:1px solid rgba(240,107,107,.3); }
-
     .filters, .form-grid { display:grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; }
     .form-grid.two { grid-template-columns: repeat(2, minmax(0, 1fr)); }
     .actions { display:flex; gap:8px; flex-wrap:wrap; }
     .message { font-size:13px; margin-top:8px; color: var(--muted); }
     .ok { color: #b5efc3; }
     .ng { color: #ffc0c0; }
-
     .pill {
       display:inline-flex;
       align-items:center;
@@ -138,20 +134,17 @@
     .split { display:flex; justify-content:space-between; gap:10px; align-items:center; }
     .muted { color: var(--muted); }
     .hidden { display:none !important; }
-
     .member-cards, .coupon-cards, .checkin-cards {
       display:flex;
       flex-direction:column;
       gap:10px;
     }
-
     .member-card, .coupon-card, .checkin-card {
       background: #101010;
       border: 1px solid rgba(255,255,255,.05);
       border-radius: 18px;
       padding: 14px;
     }
-
     .member-card-top, .coupon-card-top, .checkin-card-top {
       display:flex;
       justify-content:space-between;
@@ -159,7 +152,6 @@
       align-items:flex-start;
       margin-bottom: 8px;
     }
-
     .member-name, .coupon-title { font-size: 18px; font-weight: 800; }
     .line-id, .coupon-desc {
       color: var(--muted);
@@ -167,14 +159,12 @@
       margin-top: 4px;
       word-break: break-all;
     }
-
     .member-meta {
       display:grid;
       grid-template-columns: repeat(3, minmax(0, 1fr));
       gap:8px;
       margin: 12px 0;
     }
-
     .meta-box {
       background: rgba(255,255,255,.025);
       border: 1px solid rgba(255,255,255,.05);
@@ -183,7 +173,6 @@
     }
     .meta-box .label { color: var(--muted); font-size: 12px; }
     .meta-box strong { display:block; margin-top: 6px; font-size: 18px; }
-
     .detail-grid {
       display:grid;
       grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -197,22 +186,18 @@
     }
     .detail-stat .label { color: var(--muted); font-size: 12px; }
     .detail-stat strong { display:block; margin-top: 8px; font-size: 24px; }
-
     .hr {
       height:1px;
       background: rgba(255,255,255,.06);
       margin:16px 0;
     }
-
     .coupon-badges {
       display:flex;
       gap:8px;
       flex-wrap:wrap;
       margin-top: 10px;
     }
-
     .desktop-table { display:none; }
-
     #qr-reader {
       width: 100%;
       max-width: 480px;
@@ -220,13 +205,11 @@
       overflow: hidden;
       border-radius: 18px;
     }
-
     @media (min-width: 901px) {
       body { padding: 24px; }
       .desktop-table { display:block; }
       .mobile-cards { display:none; }
     }
-
     @media (max-width: 900px) {
       .grid { grid-template-columns: 1fr; }
       .config-row { grid-template-columns: 1fr; max-width: none; }
